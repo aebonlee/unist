@@ -27,6 +27,9 @@ const Lecture = lazy(() => import('../pages/Lecture'));
 const Module1 = lazy(() => import('../pages/Module1'));
 const Module2 = lazy(() => import('../pages/Module2'));
 const Module3 = lazy(() => import('../pages/Module3'));
+const Module4 = lazy(() => import('../pages/Module4'));
+const Module5 = lazy(() => import('../pages/Module5'));
+const Module6 = lazy(() => import('../pages/Module6'));
 const RecommendedSites = lazy(() => import('../pages/RecommendedSites'));
 const AboutPage = lazy(() => import('../pages/About'));
 const CompanyIntro = lazy(() => import('../pages/CompanyIntro'));
@@ -82,11 +85,14 @@ const PublicLayout = (): ReactElement => {
             {/* 커리큘럼 */}
             <Route path="/curriculum" element={<Curriculum />} />
 
-            {/* 강의안 — 3개 모듈 */}
+            {/* 강의안 — 6개 모듈 */}
             <Route path="/lecture" element={<Lecture />} />
             <Route path="/lecture/module1" element={<Module1 />} />
             <Route path="/lecture/module2" element={<Module2 />} />
             <Route path="/lecture/module3" element={<Module3 />} />
+            <Route path="/lecture/module4" element={<Module4 />} />
+            <Route path="/lecture/module5" element={<Module5 />} />
+            <Route path="/lecture/module6" element={<Module6 />} />
 
             {/* AI 메뉴 (ai-free 포팅) */}
             <Route path="/learn" element={<Learn />} />

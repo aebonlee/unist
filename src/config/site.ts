@@ -9,8 +9,8 @@ const site: SiteConfig = {
   id: 'unist',
 
   name: 'UNIST',
-  nameKo: '데이터 분석 실습 & 시각화',
-  description: '엑셀 기반 EDA·시각화·대시보드 구축 실습으로 데이터 기반 의사결정 역량을 키우는 1일 6시간 중급 과정',
+  nameKo: '생성형 AI 활용 데이터 분석',
+  description: '울산 중소기업 현장연계 전문인력 양성과정 — Colab·Gemini 생성형 AI로 화학 공정·고객·비즈니스 데이터를 분석하는 6시간 실습 과정',
   url: 'https://unist.dreamitbiz.com',
 
   dbPrefix: 'unist_',
@@ -80,9 +80,12 @@ const site: SiteConfig = {
       path: '/lecture',
       activePath: '/lecture',
       dropdown: [
-        { path: '/lecture/module1', labelKey: '탐색적 데이터분석 (EDA)' },
-        { path: '/lecture/module2', labelKey: '시각화의 원리 및 기획' },
-        { path: '/lecture/module3', labelKey: '실무형 대시보드 구축' },
+        { path: '/lecture/module1', labelKey: '화학·제조 산업 AX와 데이터 리터러시' },
+        { path: '/lecture/module2', labelKey: '클라우드 AI 분석환경 (Colab·PTCF)' },
+        { path: '/lecture/module3', labelKey: '데이터 정제 및 통계 분석' },
+        { path: '/lecture/module4', labelKey: '고객 반응 데이터 분석' },
+        { path: '/lecture/module5', labelKey: 'KAMP 화학공정 품질분석' },
+        { path: '/lecture/module6', labelKey: 'AI 시각화·지식화 프로젝트' },
       ]
     },
     { labelKey: 'AI 학습자료', path: '/learn', activePath: '/learn' },

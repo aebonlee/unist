@@ -6,49 +6,86 @@ const MODULES = [
   {
     no: '01',
     to: '/lecture/module1',
-    time: '2.0H',
-    title: '탐색적 데이터분석(EDA)',
-    headline: '데이터를 쪼개고 파악하는 EDA 분석 기법',
+    time: '1.0H',
+    title: '화학·제조 산업 AX와 데이터 리터러시',
+    headline: '울산 화학산업의 AI 전환과 현장 데이터 문해력',
     items: [
-      '데이터를 다각도로 파악하는 탐색적 데이터 분석(EDA)의 목적과 실무적 가치 이해',
-      '비즈니스 문제 정의에 따른 핵심 가설 수립 및 데이터를 통한 논리적 검증 프로세스 체득',
-      '가설 검증을 위한 지표 쪼개기(Drill-down) 및 다차원(Dimension) 데이터 분할 기법 학습',
+      '화학·제조 산업 디지털 전환(AX) 동향 및 성과 사례 분석',
+      '현장 데이터 문해력의 정의와 중요성, 데이터 분석 워크플로우(수집-전처리-분석-인사이트 도출)',
+      '목적별 생성형 AI 도구의 특장점, AI 윤리 준수 및 제조 데이터 보안 가이드라인',
     ],
-    labs: [
-      '공공데이터 및 가상 실무 데이터를 활용한 시계열 트렌드, 요일별/집단별 특성 분석',
-      '상관분석, 교차분석 등을 활용하여 변수 간의 숨겨진 패턴 및 비즈니스 인사이트 도출',
-      '요약 통계량의 맹점을 보완하기 위한 데이터 분포(히스토그램, 박스플롯) 초기 형태 확인',
-    ],
+    labs: [],
   },
   {
     no: '02',
     to: '/lecture/module2',
-    time: '2.0H',
-    title: '데이터 시각화의 원리 및 기획',
-    headline: '한눈에 들어오는 데이터 시각화 전략',
+    time: '1.0H',
+    title: '클라우드 기반 AI 분석 환경 구축',
+    headline: 'Colab + Gemini와 PTCF 프롬프트 엔지니어링',
     items: [
-      '데이터가 전달하고자 하는 핵심 메시지(Message) 도출 및 보고 대상(타겟)에 맞춘 시각화 목적 정의',
-      '데이터 특성 및 목적에 맞는 최적의 차트 선택 가이드 (비교-막대, 추이-꺾은선, 분포-산점도 등)',
+      '클라우드와 로컬 데이터 분석 환경의 차이, 구글 Colab 접속 및 기본 인터페이스',
+      '프롬프트 엔지니어링 PTCF 원칙(Persona·Task·Context·Format) 이해 및 적용',
     ],
     labs: [
-      '정보 가독성을 높이는 디자인 원칙 적용: 전략적 색상 활용, 불필요한 요소 제거(Data-Ink Ratio), 시선 유도 기법',
-      '실무 보고서에서 3D 차트 남용, y축 왜곡, 이중 축 오용 등 시각화 시 흔히 범하는 정보 왜곡 오류 피하기',
-      '인지 편향을 방지하고 객관적인 팩트를 전달하기 위한 윤리적이고 정확한 데이터 표현',
+      'Colab 내장 Gemini를 활용한 기본 분석 코드 자동 생성·실행·검증',
     ],
   },
   {
     no: '03',
     to: '/lecture/module3',
-    time: '2.0H',
-    title: '실무형 시각화 대시보드 구축',
-    headline: '인사이트를 한 화면에 담는 대시보드 구현',
+    time: '1.0H',
+    title: '비즈니스 데이터 정제 및 통계 분석',
+    headline: '표 정형화 · 통계 지표 · 키워드 시각화',
     items: [
-      '엑셀 조건부 서식, 스파크라인, 데이터 막대를 활용하여 표(Table) 자체를 직관적으로 시각화하기',
+      '문서 내 표 데이터 정형화 및 분석 가능한 데이터 정제/추출',
+      '데이터 기반 통계 수치 분석 및 핵심 지표 도출',
     ],
     labs: [
-      '부서별(영업, 연구, 인사 등) 주요 KPI 모니터링을 위한 대시보드 레이아웃 기획 및 화면 설계',
-      '피벗 차트(Pivot Chart)와 슬라이서, 시간 표시 막대를 연동한 인터랙티브(Interactive) 동적 차트 구축하기',
-      '원본 데이터 업데이트 시 차트와 핵심 지표가 즉시 자동 반영되는 자동화 리포트 템플릿 완성',
+      '텍스트 데이터 키워드 추출 기반 워드클라우드 생성',
+      '분석 결과 기반 데이터 인사이트 도출 및 요약',
+    ],
+  },
+  {
+    no: '04',
+    to: '/lecture/module4',
+    time: '1.0H',
+    title: '고객 반응 데이터 수집 및 분석',
+    headline: '앱스토어 리뷰 크롤링 → 페인포인트 → 개선 리포트',
+    items: [
+      '구글 앱스토어 리뷰 데이터 수집 프로세스 이해 및 자동 수집(크롤링) 코드 구현',
+      '사용자 의견 테마 분석 및 핵심 페인포인트 추출',
+    ],
+    labs: [
+      '분석 데이터 기반 최종 제품 개선 리포트(Gemini Canvas 활용) 작성',
+    ],
+  },
+  {
+    no: '05',
+    to: '/lecture/module5',
+    time: '1.0H',
+    title: 'KAMP 화학공정 품질 데이터 분석',
+    headline: '한빛케미칼 반응공정 — 수율 예측과 최적 운전조건 (화학 트랙 핵심)',
+    items: [
+      '인공지능 제조 플랫폼(KAMP) 데이터 활용 가이드',
+      '화학 공정 운전변수(온도·pH·체류시간 등)와 품질(수율·불량) 간 상관관계 이해',
+    ],
+    labs: [
+      '화학 공정 데이터 수집·전처리·EDA 및 불량 배치 예측 모델링·성능 검증',
+      '변수 중요도 기반 최적 운전조건 도출 및 품질 모니터링 대시보드 설계',
+    ],
+  },
+  {
+    no: '06',
+    to: '/lecture/module6',
+    time: '1.0H',
+    title: 'AI 도구 활용 분석 결과 시각화',
+    headline: 'NotebookLM 지식화 · Canvas 리포트 · 앱 대시보드',
+    items: [
+      'NotebookLM 사용법 및 분석 코드·자료 업로드, 스튜디오로 슬라이드·마인드맵 등 생성물 제작',
+    ],
+    labs: [
+      'Gemini Canvas 연동 최종 분석 리포트 문서 생성',
+      '분석 결과 시각화 기반 앱 대시보드 기획 및 제작',
     ],
   },
 ];
@@ -56,13 +93,13 @@ const MODULES = [
 const Curriculum = (): ReactElement => {
   return (
     <>
-      <SEOHead title="커리큘럼" description="데이터 분석 실습 & 시각화 — EDA·시각화·대시보드 3개 모듈 세부 커리큘럼" />
+      <SEOHead title="커리큘럼" description="생성형 AI 활용 데이터 분석 — 산업 AX·환경 구축·정제·고객 분석·KAMP 화학공정·시각화 6개 모듈 세부 커리큘럼" />
 
       <section className="page-header-ed">
         <div className="container">
-          <div className="eyebrow">Curriculum · 2026 KERIS</div>
-          <h2>데이터 분석 실습 &amp; 시각화</h2>
-          <p>1일 6시간 · 중급 · 공통직무 — EDA부터 실무 대시보드까지</p>
+          <div className="eyebrow">Curriculum · 울산 중소기업 현장연계 전문인력 양성과정</div>
+          <h2>생성형 AI 활용 데이터 분석</h2>
+          <p>6시간 · 화학 트랙 — 산업 AX부터 KAMP 화학공정 품질 예측까지</p>
         </div>
       </section>
 
@@ -76,18 +113,18 @@ const Curriculum = (): ReactElement => {
           <div className="pillars">
             <div className="pillar">
               <div className="pillar-num">/01</div>
-              <h4>데이터 기반 의사결정</h4>
-              <p>데이터 분석과 시각화의 핵심 원리를 이해하고 데이터 기반 의사결정 역량을 강화합니다.</p>
+              <h4>분석 전 과정 수행</h4>
+              <p>생성형 AI를 활용해 수집→전처리→분석→인사이트 도출까지 데이터 분석 전 과정을 스스로 수행합니다.</p>
             </div>
             <div className="pillar">
               <div className="pillar-num">/02</div>
-              <h4>실무 역량 내재화</h4>
-              <p>엑셀 기반 EDA·시각화·대시보드 구축 실습을 통해 실무 중심의 데이터 분석 및 보고 역량을 내재화합니다.</p>
+              <h4>화학 현장 적용</h4>
+              <p>KAMP 화학 공정 실데이터로 수율을 예측하고 최적 운전조건을 도출하는 현장형 품질 분석을 체득합니다.</p>
             </div>
             <div className="pillar">
               <div className="pillar-num">/03</div>
               <h4>핵심 키워드</h4>
-              <p>데이터 분석 · 엑셀 전처리 · EDA · 차트 선택 · 대시보드 · 피벗 · KPI 모니터링.</p>
+              <p>Colab · Gemini · PTCF · 데이터 정제 · 통계 · 리뷰 분석 · KAMP · 수율 예측 · NotebookLM · 대시보드.</p>
             </div>
           </div>
         </div>
@@ -98,8 +135,8 @@ const Curriculum = (): ReactElement => {
         <div className="container">
           <div className="section-head">
             <div className="section-num">&mdash; 세부 커리큘럼</div>
-            <h2 className="section-title-ed">3개 <span className="accent">모듈</span></h2>
-            <div className="section-meta">2.0H × 3 = 6.0H</div>
+            <h2 className="section-title-ed">6개 <span className="accent">모듈</span></h2>
+            <div className="section-meta">1.0H × 6 = 6.0H</div>
           </div>
 
           <div className="curr-modules" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>

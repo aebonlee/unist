@@ -3,46 +3,30 @@ import SEOHead from '../components/SEOHead';
 import type { ReactElement } from 'react';
 
 const MODULES = [
-  { no: '01', to: '/lecture/module1', level: 1, title: '탐색적 데이터분석(EDA)',
-    desc: 'EDA의 목적과 가치, 가설 수립과 검증, 드릴다운·다차원 분할, 상관·교차분석, 분포 확인까지.', meta: ['2.0H', '강의 + 실습'] },
-  { no: '02', to: '/lecture/module2', level: 2, title: '시각화의 원리 및 기획',
-    desc: '핵심 메시지 도출, 차트 선택 가이드, Data-Ink Ratio, 정보 왜곡 회피, 윤리적 데이터 표현.', meta: ['2.0H', '디자인 실습'] },
-  { no: '03', to: '/lecture/module3', level: 3, title: '실무형 대시보드 구축',
-    desc: '조건부 서식·스파크라인, KPI 대시보드 설계, 피벗 차트·슬라이서 연동, 자동화 리포트 템플릿.', meta: ['2.0H', '대시보드 실습'] },
+  { no: '01', to: '/lecture/module1', level: 1, title: '화학·제조 산업 AX와 데이터 리터러시',
+    desc: 'AX와 제조 AI 혁신 사례, 데이터 문해력 4요소, 분석 워크플로우 4단계, 목적별 생성형 AI 도구와 윤리·보안.', meta: ['1.0H', '이론'] },
+  { no: '02', to: '/lecture/module2', level: 1, title: '클라우드 기반 AI 분석 환경 구축',
+    desc: '클라우드 vs 로컬, Google Colab 인터페이스, PTCF 프롬프트 원칙, Gemini 분석 코드 자동 생성 실습.', meta: ['1.0H', '이론·실습'] },
+  { no: '03', to: '/lecture/module3', level: 2, title: '비즈니스 데이터 정제 및 통계 분석',
+    desc: '문서 속 표의 정형화(tidy), 평균·중앙값·표준편차·상관계수 등 통계 지표, 키워드 추출 기반 워드클라우드.', meta: ['1.0H', '실습'] },
+  { no: '04', to: '/lecture/module4', level: 2, title: '고객 반응 데이터 수집 및 분석',
+    desc: '앱스토어 리뷰 자동 수집(크롤링), 테마 분석과 페인포인트 추출, Gemini Canvas 제품 개선 리포트.', meta: ['1.0H', '실습'] },
+  { no: '05', to: '/lecture/module5', level: 3, title: 'KAMP 화학공정 품질 데이터 분석',
+    desc: 'KAMP 화학 공정 데이터로 운전변수와 수율 상관·예측, 불량 배치 예측 모델과 최적 운전조건 도출.', meta: ['1.0H', '실습', '화학 핵심'] },
+  { no: '06', to: '/lecture/module6', level: 3, title: 'AI 도구 활용 분석 결과 시각화',
+    desc: 'NotebookLM 지식 구조화, Gemini Canvas 최종 리포트, KPI 앱 대시보드 기획·제작 프로젝트.', meta: ['1.0H', '프로젝트'] },
 ];
 
 const Lecture = (): ReactElement => {
   return (
     <>
-      <SEOHead title="강의안" description="데이터 분석 실습 & 시각화 — 모듈별 강의 자료" />
+      <SEOHead title="강의안" description="생성형 AI 활용 데이터 분석 — 모듈별 강의 자료" />
 
       <section className="page-header-ed">
         <div className="container">
           <div className="eyebrow">Lecture Notes</div>
           <h2>강의안</h2>
-          <p>데이터 분석 실습 &amp; 시각화 — 모듈별 강의 자료</p>
-          <p style={{ marginTop: '1.4rem' }}>
-            <a
-              href={`${import.meta.env.BASE_URL}slides.html`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="course-cta"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem' }}
-            >
-              📊 강의안 슬라이드 (웹) 열기
-              <svg className="btn-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" width="16" height="16">
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </a>
-            <a
-              href={`${import.meta.env.BASE_URL}${encodeURIComponent('강의안_데이터분석_시각화.pptx')}`}
-              download
-              className="course-cta"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '.5rem', marginLeft: '1rem' }}
-            >
-              ⬇ PPT 원본 (.pptx) 내려받기
-            </a>
-          </p>
+          <p>생성형 AI 활용 데이터 분석 · 화학 트랙 — 모듈별 강의 자료</p>
         </div>
       </section>
 
@@ -51,11 +35,11 @@ const Lecture = (): ReactElement => {
           <div className="section-head">
             <div className="section-num">&mdash; 강의 자료</div>
             <h2 className="section-title-ed">모듈별 <span className="accent">강의안</span></h2>
-            <div className="section-meta">3 modules · detailed notes</div>
+            <div className="section-meta">6 modules · detailed notes</div>
           </div>
           <div className="courses">
             {MODULES.map((m, idx) => (
-              <Link className={`course${idx === 0 ? ' featured' : ''}`} to={m.to} key={m.to}>
+              <Link className={`course${idx === 4 ? ' featured' : ''}`} to={m.to} key={m.to}>
                 <div className="course-row">
                   <span className="course-tag">LECTURE / {m.no}</span>
                   <span className="course-level">

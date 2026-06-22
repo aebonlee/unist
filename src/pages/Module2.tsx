@@ -1,211 +1,200 @@
 import { useLanguage } from '../contexts/LanguageContext';
 import GuidePage from '../components/GuidePage';
 
-const module2Viz = {
-  id: 'module2-viz',
-  icon: 'fa-chart-pie',
-  title: '모듈 2 · 시각화의 원리 및 기획',
-  titleEn: 'Module 2 · Visualization Principles & Planning',
+const module2Data = {
+  id: 'module2-env',
+  icon: 'fa-cloud',
+  title: '모듈 2 · 클라우드 기반 AI 분석 환경 구축',
+  titleEn: 'Module 2 · Cloud-based AI Analysis Environment',
   sections: [
     {
-      title: '시각화의 목적 — 메시지와 타겟 정의',
-      titleEn: 'Purpose of Visualization — Message and Audience',
-      content: `데이터 시각화는 **예쁜 그림을 그리는 일이 아니라, 데이터가 담고 있는 메시지를 가장 빠르고 정확하게 전달하는 일**입니다. 차트를 그리기 전에 반드시 두 가지를 먼저 정의해야 합니다 — **무엇을 말할 것인가(메시지)**, **누구에게 말할 것인가(타겟)**.
+      title: '클라우드 vs 로컬, 그리고 Colab',
+      titleEn: 'Cloud vs Local, and Colab',
+      content: `데이터 분석을 시작할 때 가장 먼저 부딪히는 질문은 **"어디서 코드를 돌릴 것인가"**입니다. 크게 **클라우드(Google Colab)**와 **로컬(내 PC에 직접 설치)** 두 가지 길이 있습니다. 비전공자·현장 실무자라면 **설치가 필요 없는 클라우드(Colab)로 시작**하는 것을 강력히 권합니다.
 
-### 핵심 메시지(So-What) 도출
+### 왜 환경이 문제인가
 
-좋은 차트는 "데이터를 보여주는 차트"가 아니라 "결론을 보여주는 차트"입니다. 차트를 만들기 전에 스스로 물어보세요.
+파이썬 분석을 로컬에서 하려면 파이썬 설치, 가상환경 생성, pandas·matplotlib 같은 라이브러리 설치, 버전 충돌 해결까지 거쳐야 합니다. 분석을 시작하기도 전에 **"환경 설정 지옥"**에 빠지기 쉽습니다. 특히 최근 Apple Silicon(ARM) 맥에서는 일부 라이브러리 호환성 이슈까지 겹칩니다.
 
-- 이 데이터에서 가장 중요한 한 문장은 무엇인가?
-- 보는 사람이 이 차트를 보고 **무엇을 하길** 바라는가?
-- 제목에 "월별 매출"이 아니라 **"3분기 매출이 전년 대비 18% 감소했다"**처럼 결론을 쓸 수 있는가?
+클라우드 환경인 **Google Colab**은 이 과정을 통째로 건너뜁니다. 구글 계정과 브라우저만 있으면 **이미 분석 라이브러리가 깔린 가상의 컴퓨터**를 즉시 빌려 쓸 수 있습니다.
 
-> 차트 제목에 결론(So-What)을 쓰는 순간, 시각화의 목적이 분명해지고 불필요한 요소가 저절로 정리됩니다.
+### 클라우드(Colab) vs 로컬(내 PC) 비교
 
-### 보고 대상(타겟)에 맞춘 전략
+| 항목 | 클라우드 (Google Colab) | 로컬 (내 PC) |
+|------|--------------------------|---------------|
+| **설치** | 불필요 · 브라우저만 있으면 됨 | 파이썬·라이브러리 직접 설치 |
+| **연산 자원** | 무료 GPU/TPU 제공 | 내 PC 사양에 의존 |
+| **환경 일관성** | 어디서나 동일한 환경 | PC마다 버전·설정이 다름 |
+| **협업·공유** | 구글 드라이브 연동, 링크 공유 쉬움 | 파일·환경 별도 전달 필요 |
+| **오프라인** | 인터넷 필요 | 오프라인 사용 가능 |
+| **보안 데이터** | 외부 클라우드 업로드 부담 | 사내·오프라인 데이터에 적합 |
+| **호환성** | 신경 쓸 필요 없음 | ARM(M1/M2 맥) 호환성 이슈 |
 
-같은 데이터라도 보는 사람에 따라 시각화 방식이 달라져야 합니다.
+> **현장 가이드**: 교육·프로토타이핑·협업은 **Colab**, 사내 보안 데이터나 오프라인 운영 환경은 **로컬**. 이 과정에서는 설치 부담이 없는 **Colab**으로 진행합니다.`,
+      contentEn: `The first practical question in data analysis is **"where do I run my code?"** There are two main paths: the **cloud (Google Colab)** or **local (installed on your own PC)**. For non-developers and field practitioners, **starting with the installation-free cloud (Colab) is strongly recommended**.
 
-| 타겟 | 관심사 | 시각화 전략 |
-|------|--------|-------------|
-| 경영진 | 결론·의사결정 | KPI 1~2개, 큰 숫자, 추세 한눈에. 디테일 제거 |
-| 실무자 | 원인·세부 | 차원별 분해, 비교 가능한 표·차트, 필터 제공 |
-| 외부/고객 | 신뢰·맥락 | 출처 명시, 단순하고 오해 없는 표현, 스토리 흐름 |
+Running Python locally means installing Python, creating virtual environments, installing libraries like pandas and matplotlib, and resolving version conflicts — an "environment-setup hell" that hits before analysis even begins. Apple Silicon (ARM) Macs add further compatibility issues.
 
-타겟이 정해지면 "어디까지 보여줄지", "얼마나 단순화할지"가 결정됩니다.`,
-      contentEn: `Visualization is not about drawing pretty pictures — it is about **delivering the message inside the data as fast and accurately as possible**. Before charting, define two things: **what to say (message)** and **who you are speaking to (audience)**.
-
-- **So-What first**: a good chart shows the conclusion, not just the data. Try writing the conclusion in the title (e.g. "Q3 revenue fell 18% YoY").
-- **Audience-tailored**: executives want KPIs and trends; practitioners want breakdowns and filters; external readers want sources and clear, unambiguous framing.
-
-Once message and audience are set, decisions about detail level and simplification follow naturally.`,
+Google Colab skips all of this: with just a Google account and a browser, you instantly borrow a virtual machine that already has the analysis libraries installed. Cloud offers no-install setup, free GPU/TPU, consistent environments, and easy sharing; local is better for offline use and sensitive in-house data.`,
     },
     {
-      title: '차트 선택 가이드 — 데이터 특성별 최적 차트',
-      titleEn: 'Chart Selection Guide',
-      content: `차트 선택의 출발점은 "예쁜 차트"가 아니라 **"내가 보여주려는 관계가 무엇인가"**입니다. 분석 목적을 다섯 가지로 나누면 차트는 거의 자동으로 결정됩니다.
+      title: 'Google Colab 인터페이스 핵심',
+      titleEn: 'Google Colab Interface Essentials',
+      content: `Colab은 **노트북(Notebook)** 형태입니다. 한 화면을 여러 개의 **셀(cell)**로 나누어, 코드와 설명을 한 곳에 섞어 쓰면서 단계별로 실행합니다. 처음 보면 낯설지만, 핵심 구성요소는 다섯 가지뿐입니다.
 
-### 목적별 차트 매핑
+### 화면 구성요소 5가지
 
-| 분석 목적 | 권장 차트 | 예시 |
-|-----------|-----------|------|
-| **비교** (항목 간 크기) | 막대그래프(가로/세로) | 지점별 매출 비교 |
-| **추이** (시간 변화) | 꺾은선그래프 | 월별 방문자 추세 |
-| **구성** (부분/전체 비율) | 누적막대 · (제한적으로) 파이 | 채널별 매출 비중 |
-| **관계** (두 변수의 상관) | 산점도 | 광고비 vs 매출 |
-| **분포** (값이 퍼진 모양) | 히스토그램 · 박스플롯 | 고객 연령 분포 |
+| 구성요소 | 역할 | 사용법 |
+|----------|------|--------|
+| **코드 셀** | 파이썬 코드를 작성·실행 | 코드 입력 후 \`Shift\` + \`Enter\` |
+| **텍스트 셀** | 마크다운으로 설명·제목 작성 | 분석 의도·해석을 글로 기록 |
+| **런타임** | 코드를 실제로 돌리는 가상 컴퓨터 | 우측 상단 **'연결'** 클릭 후 실행 |
+| **파일 패널** | 데이터 업로드·드라이브 마운트 | 좌측 폴더 아이콘에서 CSV 업로드 |
+| **Gemini ✨** | 코드 자동 생성 AI 도우미 | 셀 옆 ✨ 아이콘 → 자연어로 요청 |
 
-### 자주 하는 실수
+### 셀 실행의 기본
 
-- **파이차트 남용**: 항목이 4개를 넘거나 비율 차이가 작으면 파이는 비교가 어렵습니다. → 막대그래프로 대체하세요.
-- **추이에 막대 사용**: 시간의 흐름은 꺾은선이 더 직관적입니다.
-- **너무 많은 계열**: 한 차트에 선이 6개 이상이면 "스파게티 차트"가 됩니다. → 강조할 1~2개만 남기고 나머지는 회색 처리.
+- **\`Shift\` + \`Enter\`**: 현재 셀 실행 후 다음 셀로 이동
+- **\`Ctrl\` + \`Enter\`** (맥은 \`Cmd\` + \`Enter\`): 현재 셀만 실행하고 그 자리에 머무름
+- 셀 왼쪽의 **[ ]** 가 **[▶]** 으로 바뀌면 실행 가능, 숫자(\`[1]\`)가 뜨면 실행 완료를 뜻합니다.
 
-> 규칙: **비교는 막대, 추이는 선, 관계는 산점도, 분포는 히스토그램/박스플롯.** 구성비는 파이보다 누적막대를 먼저 고려하세요.`,
-      contentEn: `Start chart choice from "what relationship am I showing", not aesthetics. Five purposes map almost automatically: **comparison → bars, trend → line, composition → stacked bar/(limited) pie, relationship → scatter, distribution → histogram/box plot.**
+> 노트북은 **위에서 아래로 순서대로** 실행하는 것이 원칙입니다. 중간 셀을 건너뛰면 변수가 정의되지 않아 오류가 납니다.
 
-Common mistakes: overusing pie charts (use bars when items > 4), using bars for time trends (use lines), and packing too many series into one chart (highlight 1–2, gray out the rest).`,
+### 첫 실습 흐름 (미리 보기)
+
+1. **Colab 접속** — \`colab.research.google.com\` 에서 구글 로그인
+2. **새 노트북 생성** — [파일] → [새 노트북]
+3. **CSV 업로드** — 좌측 파일 패널에 \`batch.csv\` 끌어다 놓기
+4. **코드 셀 실행** — \`Shift\` + \`Enter\` 로 결과 확인
+
+이 네 단계가 모든 분석의 출발점입니다. 다음 섹션에서는 코드를 직접 짜는 대신 **AI에게 코드를 시키는 법**을 배웁니다.`,
+      contentEn: `Colab is a **notebook**: one screen split into **cells** where you mix code and explanation and run them step by step. There are only five core components.
+
+**Code cells** run Python (\`Shift\` + \`Enter\`); **text cells** hold Markdown explanations; the **runtime** is the virtual machine that executes code (click **Connect** top-right); the **file panel** handles CSV upload and Drive mounting; and **Gemini ✨** is the AI helper that generates code from natural language.
+
+A notebook runs **top to bottom** — skipping a cell leaves variables undefined and causes errors. The basic lab flow: access Colab, create a new notebook, upload a CSV, and run a code cell. From there, the next section shows how to make AI write the code for you.`,
     },
     {
-      title: '[실습] 가독성을 높이는 디자인 원칙',
-      titleEn: '[Lab] Design Principles for Readability',
-      content: `좋은 차트는 정보를 더하는 게 아니라 **불필요한 것을 덜어낸** 결과입니다. 핵심 원칙은 **Data-Ink Ratio**입니다 — 잉크(픽셀)의 대부분을 "데이터를 표현하는 데"만 쓰자는 것입니다.
+      title: '프롬프트 엔지니어링 — PTCF 원칙',
+      titleEn: 'Prompt Engineering — The PTCF Principle',
+      content: `Colab의 Gemini나 ChatGPT 같은 생성형 AI에게 분석 코드를 시킬 때, **"막연하게 부탁하면 막연한 답"**이 돌아옵니다. 좋은 결과를 얻는 핵심은 **프롬프트(요청문)를 구조적으로 작성**하는 것입니다. 가장 실용적인 틀이 **PTCF 원칙**입니다.
 
-### 1. 불필요한 요소 제거 (Data-Ink Ratio ↑)
+### PTCF 4요소
 
-다음 요소들은 대부분 지워도 됩니다.
+| 요소 | 의미 | 화학 공정 데이터 예시 |
+|------|------|----------------------|
+| **P · Persona** | AI에게 **역할 부여** | "너는 제조 공정 데이터를 다루는 데이터 분석가야" |
+| **T · Task** | **구체적 작업** 지시 | "CSV의 결측치를 확인하고 처리하는 코드를 작성해줘" |
+| **C · Context** | **배경·제약·데이터 설명** | "화학 공정 데이터이고, 컬럼은 반응온도·pH·수율이야" |
+| **F · Format** | **결과의 형식** 지정 | "한국어 주석 포함 pandas 코드로만 출력해" |
 
-- 진한 격자선(gridline) → 옅게 하거나 제거
-- 차트 테두리, 배경색, 그림자
-- **3D 효과** (왜곡만 유발, 백해무익)
-- 의미 없는 범례 (계열을 직접 라벨로 표기하면 범례 불필요)
-- 과도한 소수점 (매출에 소수점 2자리는 불필요)
+### 왜 효과가 있나
 
-### 2. 전략적 색상 활용
+- **Persona**는 AI의 답변 톤과 전문성 수준을 고정합니다. "분석가"라고 하면 분석가답게 답합니다.
+- **Task**는 모호함을 제거합니다. "분석해줘"(X) → "결측치를 평균값으로 대체하는 코드"(O).
+- **Context**는 도메인 지식을 주입합니다. 컬럼명·단위·제약을 알려주면 엉뚱한 코드를 막습니다.
+- **Format**은 결과를 바로 쓸 수 있게 만듭니다. "코드만", "표로", "3줄 요약"처럼.
 
-- **강조색은 1개 원칙**: 나머지는 회색, 말하고 싶은 항목 하나만 컬러로.
-- 색으로 의미를 일관되게: 빨강=감소/위험, 파랑=기준 등 규칙을 지킨다.
-- **색맹 고려**: 빨강-초록 조합은 피하고, 색뿐 아니라 명도·라벨로도 구분.
+### 완성형 프롬프트 예시
 
-### 3. 시선 유도
+\`\`\`
+[Persona] 너는 화학 공정 데이터를 다루는 데이터 분석가야.
+[Task] 업로드한 batch.csv의 결측치를 확인하고 평균값으로 대체하는 코드를 작성해줘.
+[Context] 컬럼은 반응온도, pH, 체류시간, 수율, 품질판정(양품/불량)이야.
+[Format] 한국어 주석을 포함한 pandas 코드로만, 단계별 설명 없이 코드만 출력해.
+\`\`\`
 
-- 막대그래프는 **값 순으로 정렬**(시간축이 아니라면)하면 비교가 쉬워집니다.
-- 데이터 라벨을 차트 위에 직접 표기하면 축을 오갈 필요가 없습니다.
-- 제목에 결론을 쓰고, 강조하고 싶은 부분에만 주석(annotation)을 답니다.
+> **기억할 한 문장**: 좋은 프롬프트는 "잘 부탁한다"가 아니라 **"역할 + 작업 + 배경 + 형식을 명확히 적는다"**입니다. AI는 적은 만큼만 똑똑해집니다.`,
+      contentEn: `When you ask generative AI (Colab's Gemini, ChatGPT) to write analysis code, **a vague request yields a vague answer**. The key is structuring the prompt, and the most practical frame is the **PTCF principle**.
 
-### Before → After 체크리스트
+- **P · Persona** — assign a role ("you are a manufacturing-process data analyst").
+- **T · Task** — give a specific instruction ("write code to check and handle missing values").
+- **C · Context** — provide background, constraints, and data description (column names, units).
+- **F · Format** — specify the output form ("Python code only, with Korean comments").
 
-| 항목 | Before | After |
-|------|--------|-------|
-| 격자선 | 진한 검정 | 옅은 회색 또는 제거 |
-| 색상 | 무지개 7색 | 강조 1색 + 회색 |
-| 범례 | 별도 박스 | 계열 끝에 직접 라벨 |
-| 제목 | "월별 매출" | "3분기 매출 18% 감소" |
-| 3D | 입체 막대 | 평면 막대 |
-
-> "더 이상 뺄 것이 없을 때 완성된다." 차트도 디자인도 마찬가지입니다.`,
-      contentEn: `Good charts are the result of **removing** the unnecessary, not adding more — the core idea is the **Data-Ink Ratio**.
-
-- **Remove clutter**: heavy gridlines, borders, backgrounds, 3D effects, redundant legends, excess decimals.
-- **Strategic color**: one accent color, the rest gray; consistent meaning; colorblind-safe (avoid red-green only).
-- **Guide the eye**: sort bars by value, label data directly, put the conclusion in the title, annotate only what matters.`,
+Persona fixes tone and expertise, Task removes ambiguity, Context injects domain knowledge to prevent wrong code, and Format makes the result immediately usable. A good prompt is not "please help" but **a clear statement of role + task + context + format** — AI is only as smart as what you write.`,
     },
     {
-      title: '[실습] 정보 왜곡 오류 피하기',
-      titleEn: '[Lab] Avoiding Misleading Charts',
-      content: `실무 보고서에서 가장 위험한 것은 못생긴 차트가 아니라 **사실을 왜곡하는 차트**입니다. 의도하지 않았더라도 보는 사람을 오도하면 신뢰를 잃습니다.
+      title: '[실습] Gemini로 분석 코드 자동 생성',
+      titleEn: '[Lab] Auto-generating Code with Gemini',
+      content: `이제 PTCF 프롬프트로 **Gemini가 실제 분석 코드를 짜게** 만들어 봅니다. 직접 파이썬 문법을 외울 필요 없이, **무엇을 원하는지 자연어로 설명**하면 됩니다.
 
-### 자주 범하는 왜곡과 올바른 대안
+### 실습 흐름 4단계
 
-| 왜곡 유형 | 무엇이 문제인가 | 올바른 대안 |
-|-----------|----------------|-------------|
-| **y축 0 미시작 / 잘린 축** | 작은 차이를 거대한 차이로 과장 | 막대그래프는 반드시 0부터 시작 |
-| **이중 축(dual axis) 오용** | 두 계열의 스케일을 임의 조정해 가짜 상관 연출 | 단위가 다르면 차트를 분리하거나 지수화 |
-| **3D 차트** | 원근·기울기로 크기 왜곡 | 평면 2D 사용 |
-| **면적/버블 과장** | 지름을 값에 비례시켜 면적이 제곱으로 과장 | 면적을 값에 비례시키거나 막대 사용 |
-| **부적절한 비율** | 가로세로비를 조작해 추세 기울기 왜곡 | 자연스러운 비율, 축 단위 명시 |
+1. **데이터 업로드** — Colab 좌측 파일 패널에 샘플 \`batch.csv\`(반응온도·pH·체류시간·수율·품질판정)를 끌어다 놓습니다.
+2. **프롬프트 작성** — 셀 옆 **Gemini ✨** 아이콘을 누르고 PTCF로 요청합니다. 예: *"batch.csv를 읽어 기초 통계 요약과 품질판정 비율, 결측치를 출력하는 pandas 코드를 작성해줘."*
+3. **코드 생성** — Gemini가 셀에 코드를 자동 삽입합니다.
+4. **실행·검증** — \`Shift\` + \`Enter\` 로 실행하고 결과를 확인합니다. 원하는 결과가 아니면 *"품질판정 비율을 백분율로 보여줘"*처럼 **수정 요청을 반복**합니다.
 
-### 막대그래프의 황금률
+### 입력 프롬프트 예시
 
-> 막대그래프의 y축은 **반드시 0에서 시작**해야 합니다. 막대의 "길이"로 크기를 비교하기 때문입니다. 반면 꺾은선그래프는 추세를 보는 것이므로 0에서 시작하지 않아도 되지만, 축 범위를 반드시 명시해야 합니다.
+\`\`\`
+[Persona] 너는 화학 공정 데이터를 다루는 데이터 분석가야.
+[Task] batch.csv를 불러와 기초 통계, 품질판정(양품/불량) 비율, 결측치 개수를 출력해줘.
+[Context] 컬럼은 반응온도, pH, 체류시간, 수율, 품질판정이야.
+[Format] 한국어 주석을 포함한 pandas 코드로만 출력해.
+\`\`\`
 
-이중 축 차트는 "광고비를 늘렸더니 매출이 올랐다"처럼 **상관을 인과처럼 보이게** 만드는 대표적 도구입니다. 꼭 필요할 때만, 단위를 명확히 표기해 사용하세요.`,
-      contentEn: `The most dangerous chart in a report is not an ugly one but a **misleading** one — even unintentional distortion destroys trust.
+### Gemini가 생성한 코드 (화학 공정 버전)
 
-| Distortion | Problem | Fix |
-|---|---|---|
-| Truncated y-axis | Exaggerates small differences | Start bars at 0 |
-| Dual-axis misuse | Fakes correlation | Split charts / index values |
-| 3D charts | Perspective distorts size | Use flat 2D |
-| Bubble/area | Area scales as square | Scale by area or use bars |
+\`\`\`python
+import pandas as pd
+df = pd.read_csv("batch.csv")
 
-Golden rule: **bar charts must start the y-axis at 0**; line charts may not, but must label the axis range.`,
+# 기초 통계 요약
+print(df.describe())
+
+# 품질판정 비율 (양품 / 불량)
+ratio = df["품질판정"].value_counts(normalize=True)
+print((ratio * 100).round(1))
+
+# 결측치 확인
+print(df.isnull().sum())
+\`\`\`
+
+### 결과를 어떻게 읽나
+
+- \`df.describe()\` → 각 컬럼의 평균·표준편차·최소/최대값을 한눈에. 반응온도 평균이 비정상적으로 높다면 공정 이상 신호일 수 있습니다.
+- \`품질판정\` 비율 → 양품/불량 비율을 백분율로. 불량률이 갑자기 오르면 원인 분석의 출발점이 됩니다.
+- \`isnull().sum()\` → 컬럼별 결측치 개수. 센서 누락·기록 오류를 잡아냅니다.
+
+> **핵심 태도**: AI가 짠 코드를 **그대로 믿지 말고 결과를 검증**하세요. "이 숫자가 상식적으로 맞나?"를 항상 물어보는 사람이 진짜 분석가입니다. AI는 빠른 초안을 주고, 판단은 사람이 합니다.`,
+      contentEn: `Now use a PTCF prompt to make **Gemini write real analysis code**. No need to memorize Python syntax — just describe what you want in natural language.
+
+The four-step lab flow: **(1) upload** a sample \`batch.csv\` via the file panel; **(2) write a prompt** through the Gemini ✨ icon using PTCF; **(3) generate code** that Gemini inserts into the cell; **(4) run and verify** with \`Shift\` + \`Enter\`, iterating with follow-up requests until the result is right.
+
+The generated code reads basic statistics (\`describe()\`), the pass/fail ratio of \`품질판정\`, and missing-value counts (\`isnull().sum()\`) — surfacing process anomalies, defect-rate shifts, and sensor gaps. **Key attitude**: never blindly trust AI-generated code — always verify the results and ask "does this number make sense?" AI gives a fast draft; the human makes the judgment.`,
     },
     {
-      title: '[실습] 윤리적이고 정확한 데이터 표현',
-      titleEn: '[Lab] Ethical and Accurate Data Representation',
-      content: `시각화의 마지막 책임은 **정직함**입니다. 기술적으로 틀리지 않아도, 맥락을 숨기거나 유리한 부분만 보여주면 그것은 거짓말과 같습니다.
-
-### 인지 편향을 유발하는 표현 피하기
-
-- **체리피킹(Cherry-picking)**: 유리한 기간·집단만 골라 보여주기 → 전체 맥락과 함께 제시.
-- **기준선 조작**: 비교 기준(전년? 목표? 경쟁사?)을 유리하게 선택 → 기준을 명시.
-- **표본 왜곡**: "응답자의 90%가 만족" (응답자가 10명일 때) → 표본 크기(n)를 항상 표기.
-- **상관을 인과로 포장**: "A가 오르자 B도 올랐다 = A 때문" → 다른 요인 가능성 언급.
-
-### 객관적 팩트 전달 3원칙
-
-1. **출처 명시**: 데이터의 출처와 수집 방법을 적는다.
-2. **기간·표본 명시**: 언제, 몇 건의 데이터인지 밝힌다.
-3. **단위·정의 명시**: "매출"이 부가세 포함인지, "활성 사용자"의 정의가 무엇인지.
-
-### 윤리 체크리스트
-
-- [ ] 축이 왜곡되지 않았는가? (특히 막대 y축 0)
-- [ ] 유리한 데이터만 골라내지 않았는가?
-- [ ] 표본 크기와 기간을 표기했는가?
-- [ ] 출처를 밝혔는가?
-- [ ] 상관을 인과로 단정하지 않았는가?
-
-> 좋은 분석가는 "내 주장을 돕는 차트"가 아니라 "사실을 가장 정확히 보여주는 차트"를 만듭니다.`,
-      contentEn: `The final duty of visualization is **honesty**. Even technically-correct charts lie when they hide context or show only favorable parts.
-
-- Avoid cherry-picking, baseline manipulation, sample distortion, and dressing correlation as causation.
-- Three principles of objective reporting: **state the source, state the period/sample size (n), state units and definitions.**
-- Use the ethics checklist: honest axes, no selective data, sample size shown, source cited, no unfounded causal claims.`,
-    },
-    {
-      title: '모듈 2 정리 & 차트 선택 치트시트',
-      titleEn: 'Module 2 Summary & Chart Cheat Sheet',
+      title: '모듈 2 정리 & 체크리스트',
+      titleEn: 'Module 2 Summary & Checklist',
       content: `### 핵심 요약
 
-- 시각화는 **메시지 전달 수단**이다. 차트 전에 "무엇을, 누구에게"를 먼저 정의한다.
-- 분석 목적이 차트를 결정한다 — **비교/추이/구성/관계/분포**.
-- 좋은 차트는 **덜어낸** 차트다 (Data-Ink Ratio, 강조색 1개, 직접 라벨).
-- **왜곡을 피하라** — 막대 y축 0, 이중 축·3D·면적 과장 금지.
-- 마지막은 **정직함** — 출처·표본·기간·정의 명시.
+- 분석 환경은 **클라우드(Colab) vs 로컬** 두 길이 있다. 비전공·현장은 **설치 없는 Colab**으로 시작한다.
+- Colab은 **코드 셀·텍스트 셀·런타임·파일 패널·Gemini** 다섯 요소면 충분하다. \`Shift\` + \`Enter\` 로 실행.
+- 좋은 결과는 좋은 프롬프트에서 나온다 — **PTCF (Persona · Task · Context · Format)**.
+- **Gemini ✨** 로 분석 코드를 자동 생성하되, **결과는 사람이 반드시 검증**한다.
 
-### "이 데이터엔 이 차트" 치트시트
+### 실습 체크리스트
 
-| 보여주려는 것 | 첫 번째 선택 | 피할 것 |
-|---------------|-------------|---------|
-| 항목 간 크기 비교 | 가로 막대(정렬) | 파이(5개 이상) |
-| 시간에 따른 변화 | 꺾은선 | 막대(너무 많을 때) |
-| 부분과 전체 비율 | 누적막대 100% | 3D 파이 |
-| 두 변수 관계 | 산점도 | 이중 축 |
-| 값의 분포 | 히스토그램/박스플롯 | 평균만 표기 |
-| 단일 핵심 지표 | 큰 숫자 + 추세 스파크라인 | 게이지/도넛 남용 |
+- [ ] Colab에 접속하고 구글 계정으로 로그인했다
+- [ ] 새 노트북을 생성했다
+- [ ] 좌측 파일 패널에 \`batch.csv\` 를 업로드했다
+- [ ] PTCF(Persona·Task·Context·Format)로 프롬프트를 작성했다
+- [ ] Gemini ✨ 로 분석 코드를 생성했다
+- [ ] 코드를 실행(\`Shift\` + \`Enter\`)하고 결과를 검증했다
 
-> **다음 모듈 — 실무형 대시보드 구축**: 조건부 서식·스파크라인으로 표를 시각화하고, 피벗 차트·슬라이서를 연동해 한 화면에서 KPI를 모니터링하는 인터랙티브 대시보드를 직접 만듭니다.`,
+> **다음 모듈 — 비즈니스 데이터 정제 및 통계 분석**: 실제 화학 공정 데이터를 대상으로 결측치·이상치를 정제하고, 평균·표준편차·상관계수 같은 기초 통계로 "수율에 영향을 주는 변수"를 찾아내는 방법을 실습합니다.`,
       contentEn: `### Summary
 
-- Visualization delivers a **message** — define "what / to whom" before charting.
-- Purpose decides the chart: comparison / trend / composition / relationship / distribution.
-- Good charts **remove** clutter (Data-Ink Ratio, one accent color, direct labels).
-- **Avoid distortion**: bar y-axis at 0; no dual-axis/3D/area exaggeration.
-- End with **honesty**: cite source, sample, period, definitions.
+- Two paths for an analysis environment — **cloud (Colab) vs local**; non-developers should start with **install-free Colab**.
+- Colab needs only five elements: **code cells, text cells, runtime, file panel, and Gemini**; run with \`Shift\` + \`Enter\`.
+- Good results come from good prompts — **PTCF (Persona · Task · Context · Format)**.
+- Use **Gemini ✨** to auto-generate code, but **always verify the results yourself**.
 
-**Next module — Practical Dashboards**: visualize tables with conditional formatting and sparklines, then link pivot charts and slicers into one interactive KPI dashboard.`,
+**Checklist**: access Colab and log in, create a new notebook, upload \`batch.csv\`, write a PTCF prompt, generate code with Gemini, then run and verify it.
+
+**Next module — Business Data Cleaning & Statistical Analysis**: clean missing and outlier values in real chemical-process data, then use basic statistics (mean, standard deviation, correlation) to find the variables that drive yield.`,
     },
   ],
 };
@@ -219,16 +208,16 @@ export default function Module2() {
       <section className="page-header-ed">
         <div className="container">
           <div className="eyebrow">Module 02</div>
-          <h2>{isKo ? '데이터 시각화의 원리 및 기획' : 'Visualization Principles & Planning'}</h2>
-          <p>{isKo ? '한눈에 들어오는 데이터 시각화 전략 · 2.0H' : 'Visualization strategy that lands at a glance · 2.0H'}</p>
+          <h2>{isKo ? '클라우드 기반 AI 분석 환경 구축' : 'Cloud-based AI Analysis Environment'}</h2>
+          <p>{isKo ? 'Colab + Gemini와 PTCF 프롬프트 엔지니어링 · 1.0H' : 'Colab + Gemini and PTCF prompting · 1.0H'}</p>
         </div>
       </section>
       <GuidePage
-        seoTitle="모듈 2 · 시각화의 원리 및 기획"
-        seoTitleEn="Module 2 · Visualization Principles & Planning"
-        seoDescription="시각화의 목적과 타겟 정의, 데이터 특성별 차트 선택, Data-Ink Ratio 디자인 원칙, 정보 왜곡 회피, 윤리적 데이터 표현을 다루는 데이터 시각화 강의안"
+        seoTitle="모듈 2 · 클라우드 기반 AI 분석 환경 구축"
+        seoTitleEn="Module 2 · Cloud-based AI Analysis Environment"
+        seoDescription="클라우드 vs 로컬 분석 환경, Google Colab 인터페이스, 프롬프트 엔지니어링 PTCF 원칙, Gemini를 활용한 분석 코드 자동 생성 실습 강의안"
         path="/module2"
-        dataFiles={[module2Viz]}
+        dataFiles={[module2Data]}
       />
     </>
   );

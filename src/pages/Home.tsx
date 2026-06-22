@@ -3,72 +3,103 @@ import SEOHead from '../components/SEOHead';
 import site from '../config/site';
 import type { ReactElement } from 'react';
 
-/* ── 모듈별 세부 타임라인 (KERIS 2026 세부 커리큘럼) ── */
+/* ── 모듈별 세부 타임라인 (6시간 · 6모듈) ── */
 const TIMELINE = [
   {
-    n: '01', time: '모듈 1 · 09:00 ─ 11:00 · 2.0H',
-    title: '탐색적 데이터분석(EDA)',
-    subtitle: '데이터를 쪼개고 파악하는 EDA 분석 기법',
+    n: '01', time: '모듈 1 · 09:00 ─ 10:00 · 1.0H · 이론',
+    title: '화학·제조 산업 AX와 데이터 리터러시',
+    subtitle: '울산 화학산업의 AI 전환과 현장 데이터 문해력',
     points: [
-      'EDA의 목적과 실무적 가치, 비즈니스 문제 정의',
-      '핵심 가설 수립과 데이터를 통한 논리적 검증 프로세스',
-      '지표 쪼개기(Drill-down)·다차원(Dimension) 분할 기법',
-      { p: true, t: '실습 — 시계열 트렌드, 요일별/집단별 특성 분석' },
-      { p: true, t: '실습 — 상관분석·교차분석으로 숨은 패턴 도출' },
-      { p: true, t: '실습 — 히스토그램·박스플롯으로 분포 확인' },
+      'AX(AI Transformation)와 제조 AI 혁신 사례(비전 AI 품질검사·예지보전)',
+      '현장 데이터 문해력 4요소 — 읽기·해석·활용·소통',
+      '데이터 분석 워크플로우 4단계: 수집 → 전처리 → 분석 → 인사이트',
+      '목적별 생성형 AI 도구와 AI 윤리·제조 데이터 보안',
     ]
   },
   {
-    n: '02', time: '모듈 2 · 11:00 ─ 13:00 · 2.0H',
-    title: '데이터 시각화의 원리 및 기획',
-    subtitle: '한눈에 들어오는 데이터 시각화 전략',
+    n: '02', time: '모듈 2 · 10:00 ─ 11:00 · 1.0H · 이론·실습',
+    title: '클라우드 기반 AI 분석 환경 구축',
+    subtitle: 'Colab + Gemini와 프롬프트 엔지니어링',
     points: [
-      '핵심 메시지 도출과 보고 대상(타겟)별 시각화 목적 정의',
-      '데이터 특성별 최적 차트 선택 (비교·추이·분포)',
-      { p: true, t: '실습 — 색상·Data-Ink Ratio·시선 유도 디자인 원칙' },
-      { p: true, t: '실습 — 3D 남용·y축 왜곡·이중 축 오용 피하기' },
-      { p: true, t: '실습 — 인지 편향 방지와 윤리적 데이터 표현' },
+      '클라우드 vs 로컬 분석 환경, Google Colab 인터페이스',
+      '프롬프트 엔지니어링 PTCF 원칙 (Persona·Task·Context·Format)',
+      { p: true, t: '실습 — Gemini로 분석 코드 자동 생성·실행·검증' },
     ]
   },
   {
-    n: '03', time: '모듈 3 · 14:00 ─ 16:00 · 2.0H',
-    title: '실무형 시각화 대시보드 구축',
-    subtitle: '인사이트를 한 화면에 담는 대시보드 구현',
+    n: '03', time: '모듈 3 · 11:00 ─ 12:00 · 1.0H · 실습',
+    title: '비즈니스 데이터 정제 및 통계 분석',
+    subtitle: '표 정형화 · 통계 지표 · 키워드 시각화',
     points: [
-      '조건부 서식·스파크라인·데이터 막대로 표(Table) 시각화',
-      { p: true, t: '실습 — 부서별 KPI 대시보드 레이아웃 기획·설계' },
-      { p: true, t: '실습 — 피벗 차트·슬라이서·시간 표시 막대 연동' },
-      { p: true, t: '실습 — 원본 갱신 시 자동 반영되는 리포트 템플릿' },
+      '문서 속 표 데이터를 분석 가능한 정형(tidy) 데이터로 변환',
+      '평균·중앙값·표준편차·상관계수 등 핵심 통계 지표 해석',
+      { p: true, t: '실습 — 키워드 추출 기반 워드클라우드 시각화' },
+    ]
+  },
+  {
+    n: '04', time: '모듈 4 · 13:00 ─ 14:00 · 1.0H · 실습',
+    title: '고객 반응 데이터 수집 및 분석',
+    subtitle: '앱스토어 리뷰 크롤링 → 페인포인트 → 개선 리포트',
+    points: [
+      '앱스토어 리뷰 데이터 자동 수집(크롤링)',
+      '테마 분석 및 핵심 페인포인트 추출',
+      { p: true, t: '실습 — Gemini Canvas로 제품 개선 리포트 작성' },
+    ]
+  },
+  {
+    n: '05', time: '모듈 5 · 14:00 ─ 15:00 · 1.0H · 실습 · 화학 핵심',
+    title: 'KAMP 화학공정 품질 데이터 분석',
+    subtitle: '한빛케미칼 반응공정 — 수율 예측과 최적 운전조건',
+    points: [
+      'KAMP 화학 공정 데이터 확보와 변수 명세 이해',
+      '운전변수(온도·pH·체류시간)와 수율의 상관·예측 분석',
+      { p: true, t: '실습 — 불량 배치 예측 모델과 최적 운전조건 도출' },
+    ]
+  },
+  {
+    n: '06', time: '모듈 6 · 15:00 ─ 16:00 · 1.0H · 프로젝트',
+    title: 'AI 도구 활용 분석 결과 시각화',
+    subtitle: 'NotebookLM 지식화 · Canvas 리포트 · 앱 대시보드',
+    points: [
+      'NotebookLM으로 분석 결과를 지식 구조화',
+      { p: true, t: '실습 — Gemini Canvas 최종 분석 리포트 제작' },
+      { p: true, t: '실습 — KPI 앱 대시보드 기획 및 시안 생성' },
     ]
   },
 ];
 
 const MODULES = [
-  { to: '/lecture/module1', tag: 'MODULE / 01', level: 1, title: '탐색적 데이터분석(EDA)',
-    desc: '데이터를 다각도로 쪼개고 파악하는 EDA의 목적과 가치를 이해하고, 가설 수립부터 상관·교차분석, 분포 확인까지 실습합니다.', meta: ['2.0H', '중급', '실습 포함'] },
-  { to: '/lecture/module2', tag: 'MODULE / 02', level: 2, title: '시각화의 원리 및 기획',
-    desc: '전달할 메시지를 정의하고, 데이터 특성에 맞는 차트를 선택합니다. 가독성을 높이는 디자인 원칙과 정보 왜곡을 피하는 법을 다룹니다.', meta: ['2.0H', '중급', '디자인 실습'] },
-  { to: '/lecture/module3', tag: 'MODULE / 03', level: 3, title: '실무형 대시보드 구축',
-    desc: '조건부 서식·피벗 차트·슬라이서를 활용해 KPI를 한 화면에 담고, 원본 갱신 시 자동 반영되는 인터랙티브 리포트를 완성합니다.', meta: ['2.0H', '중급', '대시보드'] },
+  { to: '/lecture/module1', tag: 'MODULE / 01', level: 1, title: '화학·제조 산업 AX와 데이터 리터러시',
+    desc: '울산 화학산업의 AI 전환(AX)과 제조 AI 혁신 사례를 이해하고, 데이터 문해력과 분석 워크플로우 4단계, 생성형 AI 도구·윤리를 다룹니다.', meta: ['1.0H', '이론'] },
+  { to: '/lecture/module2', tag: 'MODULE / 02', level: 1, title: '클라우드 기반 AI 분석 환경 구축',
+    desc: '설치 없이 브라우저로 쓰는 Google Colab과 내장 Gemini, 그리고 원하는 결과를 정확히 얻는 PTCF 프롬프트 원칙을 실습합니다.', meta: ['1.0H', '이론·실습'] },
+  { to: '/lecture/module3', tag: 'MODULE / 03', level: 2, title: '비즈니스 데이터 정제 및 통계 분석',
+    desc: '문서 속 뒤섞인 표를 정형 데이터로 바꾸고, 핵심 통계 지표로 해석하며, 키워드 추출 기반 시각화로 인사이트를 도출합니다.', meta: ['1.0H', '실습'] },
+  { to: '/lecture/module4', tag: 'MODULE / 04', level: 2, title: '고객 반응 데이터 수집 및 분석',
+    desc: '앱스토어 리뷰를 자동 수집하고 테마·페인포인트를 분석해, Gemini Canvas로 제품 개선 리포트를 완성합니다.', meta: ['1.0H', '실습'] },
+  { to: '/lecture/module5', tag: 'MODULE / 05', level: 3, title: 'KAMP 화학공정 품질 데이터 분석',
+    desc: 'KAMP 화학 공정 데이터로 운전변수와 수율의 관계를 분석하고, 불량 배치를 예측해 최적 운전조건을 찾는 화학 트랙 핵심 실습입니다.', meta: ['1.0H', '실습', '화학 핵심'] },
+  { to: '/lecture/module6', tag: 'MODULE / 06', level: 3, title: 'AI 도구 활용 분석 결과 시각화',
+    desc: 'NotebookLM으로 분석을 지식화하고, Gemini Canvas 리포트와 KPI 앱 대시보드로 분석을 운영 도구로 전환하는 마무리 프로젝트입니다.', meta: ['1.0H', '프로젝트'] },
 ];
 
 const TOOLS = [
-  { name: 'Excel', cat: 'SPREADSHEET', desc: '피벗 테이블·함수·조건부 서식. 본 과정의 핵심 분석·시각화 도구.', mark: 'X' },
-  { name: '피벗 차트 + 슬라이서', cat: 'INTERACTIVE', desc: '드릴다운·필터링이 가능한 동적 인터랙티브 차트 구성.', mark: 'P' },
-  { name: '조건부 서식 · 스파크라인', cat: 'TABLE VIZ', desc: '표 자체를 직관적으로 시각화하는 인-셀(in-cell) 기법.', mark: 'S' },
-  { name: '공공데이터 · 실무 데이터', cat: 'DATASET', desc: '시계열·집단별 분석을 위한 공공데이터와 가상 실무 데이터.', mark: 'D' },
+  { name: 'Google Colab + Gemini', cat: 'ANALYSIS', desc: '설치 불필요·브라우저만으로 파이썬 분석. 내장 Gemini가 코드를 자동 생성.', mark: 'C' },
+  { name: 'Gemini Canvas', cat: 'REPORT/APP', desc: '분석 결과를 문서·앱으로 자동 변환. 리포트와 대시보드 초안 제작.', mark: 'G' },
+  { name: 'Google NotebookLM', cat: 'KNOWLEDGE', desc: '코드·자료를 업로드해 근거 기반 Q&A·슬라이드·마인드맵으로 지식화.', mark: 'N' },
+  { name: 'KAMP 제조데이터', cat: 'DATASET', desc: '정부 제조 AI 플랫폼(kamp-ai.kr). 화학 공정 등 실데이터로 품질 분석.', mark: 'K' },
 ];
 
 const PILLARS = [
-  { n: '/01', t: '실무 중심 70%', d: '이론은 핵심만, 손은 계속 움직입니다. 공공데이터와 가상 실무 데이터로 EDA부터 대시보드까지 직접 만듭니다.' },
-  { n: '/02', t: '의사결정 역량', d: '데이터 분석과 시각화의 핵심 원리를 이해하고, 숫자를 인사이트로 바꿔 데이터 기반 의사결정 역량을 강화합니다.' },
-  { n: '/03', t: '왜곡 없는 시각화', d: '3D 남용·축 왜곡·인지 편향을 피하고, 객관적인 팩트를 정확하게 전달하는 윤리적 시각화를 체득합니다.' },
+  { n: '/01', t: '실습 중심 60%', d: '이론(20%)은 핵심만, 실습(60%)과 프로젝트(20%)로 손을 계속 움직입니다. 화학 공정·고객·통계 데이터로 직접 분석합니다.' },
+  { n: '/02', t: '코드 없이도', d: 'Colab의 Gemini가 PTCF 프롬프트로 분석 코드를 대신 작성합니다. 비전공자도 수집→전처리→분석→인사이트 전 과정을 수행합니다.' },
+  { n: '/03', t: '울산 화학 현장', d: 'KAMP 화학 공정 실데이터로 수율을 예측하고 최적 운전조건을 도출합니다. 현장 도메인을 아는 사람이 데이터를 만나면 가장 강력합니다.' },
 ];
 
 type TimelinePoint = string | { p: boolean; t: string };
 
 const Home = (): ReactElement => {
-  const marqueePhrase = 'EDA · Drill-down · Correlation · Distribution · Charting · Dashboard · KPI · Pivot';
+  const marqueePhrase = 'AX · Data Literacy · Colab · Gemini · PTCF · KAMP · Yield Prediction · NotebookLM · Canvas';
 
   return (
     <>
@@ -83,17 +114,17 @@ const Home = (): ReactElement => {
           <div className="hero-grid">
             <div>
               <div className="hero-eyebrow">
-                <span>2026 KERIS 교육과정 · 공통직무 · 중급</span>
+                <span>울산 중소기업 현장연계 전문인력 양성과정 · 화학 트랙</span>
               </div>
               <h1 className="hero-title-ed">
-                숫자를<br />
-                <span className="accent">인사이트로</span><br />
-                바꾸는 <span className="accent">6시간</span>
+                현장 데이터를<br />
+                <span className="accent">생성형 AI로</span><br />
+                분석하는 <span className="accent">6시간</span>
               </h1>
               <p className="hero-lead">
-                엑셀 기반 EDA·시각화·대시보드 구축 실습을 통해 데이터 분석과
-                시각화의 핵심 원리를 이해하고, 실무 중심의 데이터 기반
-                의사결정·보고 역량을 내재화하는 1일 6시간 중급 과정입니다.
+                Colab과 Gemini로 코드를 직접 짜지 않아도 화학 공정·고객·비즈니스
+                데이터를 수집·전처리·분석하고, KAMP 화학 공정 데이터로 수율을
+                예측해 최적 운전조건을 도출하는 실습 중심 6시간 과정입니다.
               </p>
               <div className="hero-actions-ed">
                 <Link className="btn btn-primary" to="/curriculum">
@@ -111,7 +142,7 @@ const Home = (): ReactElement => {
             <div className="hero-side">
               <div className="metric-stack">
                 <div className="metric">
-                  <div className="metric-num"><span className="accent">3</span></div>
+                  <div className="metric-num"><span className="accent">6</span></div>
                   <div className="metric-label">학습 모듈</div>
                 </div>
                 <div className="metric">
@@ -119,23 +150,25 @@ const Home = (): ReactElement => {
                   <div className="metric-label">총 교육 시간</div>
                 </div>
                 <div className="metric">
-                  <div className="metric-num">중급</div>
-                  <div className="metric-label">난이도</div>
+                  <div className="metric-num"><span className="accent">12</span></div>
+                  <div className="metric-label">실습·프로젝트</div>
                 </div>
                 <div className="metric">
-                  <div className="metric-num"><span className="accent">70</span><span className="small">%</span></div>
-                  <div className="metric-label">실습 비중</div>
+                  <div className="metric-num"><span className="accent">80</span><span className="small">%</span></div>
+                  <div className="metric-label">실습·프로젝트 비중</div>
                 </div>
               </div>
 
               <div className="hero-card">
                 <div className="hero-card-eyebrow">Course Overview</div>
-                <div className="hero-card-title">하루에 끝내는 데이터 분석 & 시각화</div>
+                <div className="hero-card-title">생성형 AI 활용 데이터 분석 · 화학 트랙</div>
                 <ul className="hero-card-list">
-                  <li>모듈 1 — 탐색적 데이터분석(EDA) · 2.0H</li>
-                  <li>모듈 2 — 시각화의 원리 및 기획 · 2.0H</li>
-                  <li>모듈 3 — 실무형 대시보드 구축 · 2.0H</li>
-                  <li>도구 — 엑셀(피벗·조건부 서식·슬라이서)</li>
+                  <li>M1 — 산업 AX와 데이터 리터러시 · 1.0H</li>
+                  <li>M2 — Colab·Gemini·PTCF · 1.0H</li>
+                  <li>M3 — 데이터 정제·통계 분석 · 1.0H</li>
+                  <li>M4 — 고객 반응 데이터 분석 · 1.0H</li>
+                  <li>M5 — KAMP 화학공정 품질분석 · 1.0H</li>
+                  <li>M6 — AI 시각화·지식화 프로젝트 · 1.0H</li>
                 </ul>
               </div>
             </div>
@@ -163,12 +196,12 @@ const Home = (): ReactElement => {
         <div className="container">
           <div className="section-head">
             <div className="section-num">&mdash; 01 / Modules</div>
-            <h2 className="section-title-ed">세 개의 <span className="accent">학습 모듈</span></h2>
-            <div className="section-meta">6 hours · 3 modules</div>
+            <h2 className="section-title-ed">여섯 개의 <span className="accent">학습 모듈</span></h2>
+            <div className="section-meta">6 hours · 6 modules</div>
           </div>
           <div className="courses">
             {MODULES.map((m, idx) => (
-              <Link className={`course${idx === 0 ? ' featured' : ''}`} to={m.to} key={m.to}>
+              <Link className={`course${idx === 4 ? ' featured' : ''}`} to={m.to} key={m.to}>
                 <div className="course-row">
                   <span className="course-tag">{m.tag}</span>
                   <span className="course-level">
@@ -199,22 +232,23 @@ const Home = (): ReactElement => {
           <div className="section-head">
             <div className="section-num">&mdash; 02 / Schedule</div>
             <h2 className="section-title-ed"><span className="accent">1일</span> &times; 6시간</h2>
-            <div className="section-meta">3 modules · 2.0H each</div>
+            <div className="section-meta">6 modules · 1.0H each</div>
           </div>
 
           <div className="curriculum-ed">
             <aside className="curr-aside">
-              <h3>{'하루에\n완성하는\n데이터 역량'}</h3>
+              <h3>{'현장 데이터를\n다루는\n하루'}</h3>
               <p>
-                각 2시간씩 3개 모듈로 구성된 집약적 중급 과정.
-                탐색(EDA) → 시각화 기획 → 대시보드 구축으로
-                이어지는 실무 분석의 전 과정을 다룹니다.
+                각 1시간씩 6개 모듈로 구성된 집약 과정.
+                산업 AX·환경 구축에서 시작해 정제·통계, 고객 리뷰,
+                KAMP 화학공정 품질 예측, 시각화 프로젝트까지
+                분석의 전 과정을 다룹니다.
               </p>
               <div className="curr-meta">
-                <div className="curr-meta-row"><span className="curr-meta-key">난이도</span><span className="curr-meta-val">중급</span></div>
-                <div className="curr-meta-row"><span className="curr-meta-key">대상</span><span className="curr-meta-val">공통직무</span></div>
-                <div className="curr-meta-row"><span className="curr-meta-key">도구</span><span className="curr-meta-val">Excel</span></div>
-                <div className="curr-meta-row"><span className="curr-meta-key">포맷</span><span className="curr-meta-val">강의 + 실습</span></div>
+                <div className="curr-meta-row"><span className="curr-meta-key">대상</span><span className="curr-meta-val">중소기업 재직자</span></div>
+                <div className="curr-meta-row"><span className="curr-meta-key">트랙</span><span className="curr-meta-val">화학</span></div>
+                <div className="curr-meta-row"><span className="curr-meta-key">도구</span><span className="curr-meta-val">Colab·Gemini</span></div>
+                <div className="curr-meta-row"><span className="curr-meta-key">포맷</span><span className="curr-meta-val">이론+실습+프로젝트</span></div>
               </div>
             </aside>
 
@@ -223,7 +257,7 @@ const Home = (): ReactElement => {
                 <div className="tl-item" key={item.n}>
                   <div>
                     <div className="tl-time">{item.time}</div>
-                    <div className="tl-num">{item.n}<span>/03</span></div>
+                    <div className="tl-num">{item.n}<span>/06</span></div>
                   </div>
                   <div className="tl-body">
                     <h4>{item.title}</h4>
@@ -249,7 +283,7 @@ const Home = (): ReactElement => {
           <div className="section-head">
             <div className="section-num">&mdash; 03 / Toolkit</div>
             <h2 className="section-title-ed">다루는 <span className="accent">도구들</span></h2>
-            <div className="section-meta">Excel-based · hands-on</div>
+            <div className="section-meta">Generative AI · hands-on</div>
           </div>
           <div className="tools-grid">
             {TOOLS.map((t, i) => (
@@ -293,8 +327,8 @@ const Home = (): ReactElement => {
             <div>
               <div className="cta-eyebrow">&mdash; 학습 시작</div>
               <h2 className="cta-title-ed">
-                데이터로<br />
-                <span className="accent">말하는 법</span>을 배우다.
+                현장의 질문을<br />
+                <span className="accent">데이터로</span> 풀다.
               </h2>
             </div>
             <div className="cta-side">

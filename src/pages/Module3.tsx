@@ -1,384 +1,286 @@
 import { useLanguage } from '../contexts/LanguageContext';
 import GuidePage from '../components/GuidePage';
 
-const module3Dashboard = {
-  id: 'module3-dashboard',
-  icon: 'fa-gauge-high',
-  title: '모듈 3 · 실무형 대시보드 구축',
-  titleEn: 'Module 3 · Building Practical Dashboards',
+const module3Data = {
+  id: 'module3-clean',
+  icon: 'fa-table',
+  title: '모듈 3 · 비즈니스 데이터 정제 및 통계 분석',
+  titleEn: 'Module 3 · Business Data Cleaning and Statistics',
   sections: [
     {
-      title: '표(Table)를 직관적으로 — 조건부 서식 · 스파크라인 · 데이터 막대',
-      titleEn: 'Make Tables Intuitive — Conditional Formatting, Sparklines, Data Bars',
-      content: `대시보드를 만들기 전에, **표 자체를 한눈에 읽히게** 만드는 인-셀(in-cell) 시각화 기법부터 익힙니다. 차트를 추가하지 않고도 셀 안에서 값의 크기·추세·상태를 표현할 수 있습니다.
+      title: '[실습] 문서 속 표 데이터 정형화 — 비정형에서 정형으로',
+      titleEn: '[Practice] Structuring Table Data from Documents',
+      content: `현장의 데이터는 깔끔한 CSV로 오지 않습니다. 대부분 **보고서·견적서·품질 점검표 안에 표 형태로 박혀** 있고, 그대로는 분석에 쓸 수 없습니다. 이 실습에서는 화학·제조 중소기업의 보고서 속 표를 **분석 가능한 정형 테이블**로 바꿉니다.
 
-### 1. 조건부 서식 (Conditional Formatting)
+### 1. BEFORE — 분석이 막히는 표
 
-값의 크기나 조건에 따라 셀 색·아이콘을 자동으로 바꿉니다.
+월간 영업/생산 보고서에서 흔히 보는 표입니다.
 
-| 종류 | 용도 | 만드는 단계 |
-|------|------|------------|
-| 색조(Color Scales) | 값의 높낮이를 그라데이션으로 | 범위 선택 → 홈 → 조건부 서식 → 색조 → 2색/3색 선택 |
-| 아이콘 집합(Icon Sets) | 신호등·화살표로 상태 구분 | 범위 선택 → 조건부 서식 → 아이콘 집합 |
-| 규칙(Rules) | 특정 조건(상위 10%, 중복 등) 강조 | 조건부 서식 → 셀 강조 규칙 / 상위·하위 규칙 |
+| 구분 | 1월 | | 2월 | | 비고 |
+|------|-----|----|-----|----|------|
+| 매출 | 1,200 | 만원 | 1,540 | 만원 | |
+| 생산량(t) | 320 | | | 410 | 일부 누락 |
+| 합계 | 1,520 | | 1,950 | | 자동 계산 |
 
-활용 예: 부서별 달성률 열에 3색 색조를 적용하면, 미달성(빨강)→목표(녹색) 분포가 즉시 보입니다.
+무엇이 문제일까요?
 
-### 2. 데이터 막대 (Data Bars)
+- **셀 병합·머리글 중복**: "1월" 아래에 값 열과 단위 열이 따로 있어 1행=1머리글 원칙이 깨짐
+- **단위·날짜 형식 제각각**: "만원", "(t)", 빈칸이 뒤섞임
+- **결측·합계 행이 데이터와 섞임**: \`합계\` 행이 실제 관측치처럼 들어가 평균·집계를 왜곡
+- **결측값**: 2월 생산량이 빈칸
 
-셀 안에 막대그래프를 그려 값의 상대 크기를 표시합니다.
+### 2. AFTER — 정형 테이블(tidy data)
 
-1. 수치 범위를 선택합니다.
-2. 홈 → 조건부 서식 → **데이터 막대**를 선택합니다.
-3. 그라데이션/단색 채우기를 고릅니다.
-4. (선택) **규칙 관리 → 막대만 표시**로 숫자를 숨기면 더 깔끔합니다.
+| 날짜 | 구분 | 값 | 단위 |
+|------|------|----|------|
+| 2026-01-01 | 매출 | 1200 | 만원 |
+| 2026-01-01 | 생산량 | 320 | t |
+| 2026-02-01 | 매출 | 1540 | 만원 |
+| 2026-02-01 | 생산량 | | t |
 
-### 3. 스파크라인 (Sparklines)
+정형 데이터의 두 가지 핵심 원칙:
 
-한 셀 안에 들어가는 미니 차트로, 행마다 추세를 보여줍니다.
+> **1관측치 = 1행, 1변수 = 1열.**
+> 합계·소계처럼 "계산된 행"은 데이터가 아니므로 분리하고, 컬럼마다 데이터 타입을 하나로 통일합니다(매출 열은 전부 숫자).
 
-| 유형 | 적합한 데이터 | 예시 |
-|------|--------------|------|
-| 꺾은선(Line) | 시간에 따른 추세 | 월별 매출 흐름 |
-| 열(Column) | 기간별 크기 비교 | 분기별 비용 |
-| 승패(Win/Loss) | 양수·음수(달성/미달) | 목표 대비 증감 |
+### 3. 생성형 AI로 표 추출하기 [실습]
 
-만드는 단계:
+표 이미지나 PDF를 Gemini·ChatGPT에 올리고 다음처럼 요청합니다.
 
-1. 스파크라인을 넣을 **빈 셀**을 선택합니다.
-2. 삽입 → 스파크라인 → 종류(꺾은선/열/승패)를 선택합니다.
-3. **데이터 범위**(예: 월별 12개 셀)를 지정합니다.
-4. 디자인 탭에서 높은 점·낮은 점·표식을 강조합니다.
+> "이 표 이미지를 분석 가능한 정형 테이블(CSV)로 변환해줘. **합계 행은 제외**하고, 날짜는 **YYYY-MM-DD**로 통일해줘. 단위(만원, t)는 별도 컬럼으로 분리하고, 빈칸은 결측(NaN)으로 남겨둬."
 
-> 인-셀 시각화의 목적은 "값을 읽지 않고도 패턴이 보이게" 하는 것입니다. 색·아이콘은 2~3종 이내로 절제하세요. 과하면 오히려 읽기 어려워집니다.`,
-      contentEn: `Before building dashboards, master in-cell visualization that makes the table itself readable at a glance.
+핵심은 **"무엇을 어떻게 정리할지"를 프롬프트에 명시**하는 것입니다. 합계 제외, 날짜 형식, 단위 분리 같은 규칙을 빼먹으면 AI가 임의로 채워 넣어 오히려 오류가 생깁니다.
 
-### 1. Conditional Formatting
+### 4. Gemini가 생성한 정제 코드
 
-| Type | Use | Steps |
-|------|-----|-------|
-| Color Scales | Show high/low as gradient | Select range → Home → Conditional Formatting → Color Scales |
-| Icon Sets | Status via traffic lights/arrows | Conditional Formatting → Icon Sets |
-| Rules | Highlight conditions (top 10%, duplicates) | Highlight Cells / Top-Bottom Rules |
+\`\`\`python
+import pandas as pd
 
-### 2. Data Bars
+# 1. AI가 추출한 원본 읽기
+df = pd.read_csv("raw.csv")
 
-1. Select numeric range. 2. Home → Conditional Formatting → Data Bars. 3. Pick gradient/solid fill. 4. Optionally show "Bar only".
+# 2. 표 정제 후 정형화
+df = df.dropna(how="all")            # 전부 빈 행 제거
+df = df[df["구분"] != "합계"]         # 합계 행 분리
+df["날짜"] = pd.to_datetime(df["날짜"])           # 날짜 형식 통일
+df["매출"] = df["매출"].str.replace(",", "").astype(int)  # "1,200" -> 1200
 
-### 3. Sparklines
+# 3. 정형 결과 저장
+df.to_csv("clean.csv", index=False)
+\`\`\`
 
-| Type | Best for |
-|------|----------|
-| Line | Trend over time |
-| Column | Size comparison by period |
-| Win/Loss | Positive/negative (hit/miss) |
-
-Steps: select an empty cell → Insert → Sparklines → choose type → set data range → emphasize high/low points.
-
-> Goal: make patterns visible without reading values. Keep colors/icons to 2-3 kinds.`,
-    },
-    {
-      title: '대시보드 기획 — KPI 정의와 레이아웃 설계',
-      titleEn: 'Dashboard Planning — Defining KPIs and Layout Design',
-      content: `좋은 대시보드는 **잘 그린 차트의 모음**이 아니라 **의사결정을 돕는 한 장의 화면**입니다. 차트를 그리기 전에 기획이 먼저입니다.
-
-### 좋은 대시보드의 3원칙
-
-1. **한 화면 원칙** — 스크롤 없이 한 화면(또는 한 출력 페이지)에 핵심을 담습니다.
-2. **핵심 KPI 우선** — 가장 중요한 지표를 상단·좌측에 크게 배치합니다.
-3. **시선 흐름 활용** — 사람의 눈은 **F자 / Z자** 패턴으로 움직입니다. 좌상단 → 우상단 → 하단 순으로 중요도를 배치합니다.
-
-### KPI란?
-
-KPI(Key Performance Indicator)는 목표 달성 정도를 수치로 나타내는 핵심 지표입니다. "측정할 수 있고, 목표가 있고, 행동으로 이어지는" 지표여야 합니다.
-
-### 부서별 KPI 예시
-
-| 부서 | 핵심 KPI | 보조 KPI |
-|------|----------|----------|
-| 영업 | 월 매출액, 목표 달성률 | 신규 고객 수, 평균 거래액 |
-| 연구(R&D) | 프로젝트 진척률, 일정 준수율 | 특허·논문 건수, 예산 소진율 |
-| 인사(HR) | 채용 충원율, 이직률 | 교육 이수율, 직원 만족도 |
-
-### 와이어프레임 레이아웃 설계 단계
-
-1. **목적 정의** — "누가, 무엇을, 왜 보는가"를 한 문장으로 적습니다.
-2. **KPI 선정** — 핵심 3~5개로 압축합니다(많을수록 나쁩니다).
-3. **영역 분할** — 상단 KPI 카드 / 중앙 추세 차트 / 하단 상세 표로 구역을 나눕니다.
-4. **종이 스케치** — 셀에 그리기 전에 종이/슬라이드에 박스로 배치를 그립니다.
-5. **그리드 설정** — 워크시트 눈금선을 끄고, 셀 너비를 정렬해 격자 레이아웃을 잡습니다.
-
-> KPI는 "많이 보여주기"가 아니라 "골라 보여주기"입니다. 화면에 지표가 10개 넘으면 아무것도 강조되지 않은 것과 같습니다.`,
-      contentEn: `A good dashboard is not a collection of charts but a single screen that supports decisions.
-
-### Three Principles
-
-1. **One screen** — fit the essentials without scrolling.
-2. **KPIs first** — place the most important metric large, top-left.
-3. **Reading flow** — eyes move in F/Z patterns; arrange by importance accordingly.
-
-### KPI Examples by Department
-
-| Dept | Core KPI | Secondary |
-|------|----------|-----------|
-| Sales | Monthly revenue, target rate | New customers, avg deal |
-| R&D | Project progress, on-time rate | Patents/papers, budget used |
-| HR | Hiring fill rate, turnover | Training completion, satisfaction |
-
-### Wireframe Steps
-
-1. Define purpose. 2. Pick 3-5 KPIs. 3. Split zones (KPI cards / trend charts / detail tables). 4. Sketch on paper. 5. Set grid (hide gridlines, align cells).
-
-> KPIs are about "selecting", not "showing everything". More than 10 metrics emphasizes nothing.`,
-    },
-    {
-      title: '[실습] 피벗 차트 · 슬라이서 · 시간 표시 막대 연동',
-      titleEn: '[Practice] Pivot Charts, Slicers & Timeline Integration',
-      content: `피벗테이블과 슬라이서를 연결하면 클릭만으로 여러 차트가 동시에 바뀌는 **인터랙티브 대시보드**가 됩니다.
-
-### 1. 피벗테이블 → 피벗 차트 만들기
-
-1. 원본 데이터(머리글이 있는 표) 안의 셀을 클릭합니다.
-2. 삽입 → **피벗 차트**(또는 피벗테이블 후 분석 → 피벗 차트)를 선택합니다.
-3. 필드 목록에서 **축(범주)**, **값**, **범례**에 필드를 끌어다 놓습니다.
-   - 예: 축=월, 값=합계:매출, 범례=부서
-4. 차트 종류(묶은 세로 막대/꺾은선 등)를 목적에 맞게 바꿉니다.
-
-### 2. 슬라이서 삽입과 여러 차트 연결
-
-슬라이서는 클릭형 필터 버튼입니다.
-
-1. 피벗테이블/차트를 선택합니다.
-2. 분석(또는 삽입) → **슬라이서 삽입**을 선택합니다.
-3. 필터로 쓸 필드(예: 부서, 지역)를 체크합니다.
-4. 슬라이서 우클릭 → **보고서 연결(Report Connections)**에서 **여러 피벗테이블을 동시에 연결**합니다.
-
-| 항목 | 효과 |
-|------|------|
-| 슬라이서 1개 → 차트 여러 개 연결 | 한 번 클릭으로 모든 차트가 같은 필터로 갱신 |
-| 다중 선택 버튼 | Ctrl 없이 여러 항목 동시 선택 |
-
-### 3. 시간 표시 막대 (Timeline)
-
-날짜 필드 전용 슬라이더형 기간 필터입니다.
-
-1. 피벗테이블 선택 → 분석 → **시간 표시 막대 삽입**.
-2. 날짜 필드를 선택합니다.
-3. 막대 상단에서 **연/분기/월/일** 단위를 전환합니다.
-4. 슬라이더를 드래그해 기간(예: 1~6월)을 선택하면 연결된 차트가 즉시 갱신됩니다.
-
-> 슬라이서·시간 표시 막대는 같은 데이터 모델을 쓰는 피벗에만 연결됩니다. 차트들이 함께 움직이지 않으면 "보고서 연결" 설정을 먼저 확인하세요.`,
-      contentEn: `Connecting pivot tables with slicers turns a static report into an interactive dashboard.
-
-### 1. PivotTable → PivotChart
-
-1. Click inside the source table. 2. Insert → PivotChart. 3. Drag fields to Axis/Values/Legend (e.g., Axis=Month, Values=Sum of Sales, Legend=Dept). 4. Choose chart type.
-
-### 2. Slicers Linked to Multiple Charts
-
-1. Select pivot. 2. Insert → Slicer. 3. Check filter fields (Dept, Region). 4. Right-click → Report Connections to link multiple pivots at once.
-
-### 3. Timeline
-
-1. Select pivot → Analyze → Insert Timeline. 2. Pick date field. 3. Toggle Year/Quarter/Month/Day. 4. Drag the slider to filter a period; linked charts update instantly.
-
-> Slicers/timelines only connect to pivots on the same data model. If charts don't move together, check Report Connections.`,
-    },
-    {
-      title: '[실습] 자동 갱신되는 리포트 템플릿 만들기',
-      titleEn: '[Practice] Building Auto-Refreshing Report Templates',
-      content: `데이터가 늘거나 바뀔 때마다 손으로 범위를 고치는 일은 피해야 합니다. **동적 범위 + 새로고침 + 동적 참조**로 한 번 만들면 계속 쓰는 템플릿을 구성합니다.
-
-### 1. 동적 범위 만들기
-
-| 방법 | 단계 | 장점 |
+| 처리 | 함수 | 효과 |
 |------|------|------|
-| 표(엑셀 표) | 데이터 선택 → \`Ctrl + T\` → "머리글 포함" 체크 | 행 추가 시 표·피벗 범위가 자동 확장 |
-| 이름 정의 | 수식 → 이름 관리자 → \`OFFSET\`/\`INDEX\` 기반 범위 등록 | 차트·수식에서 이름으로 참조 |
+| 빈 행 제거 | \`dropna(how="all")\` | 구분선·여백 행 정리 |
+| 합계 분리 | 불리언 인덱싱 | 집계 왜곡 방지 |
+| 날짜 통일 | \`pd.to_datetime\` | 시계열 분석 가능 |
+| 천단위 콤마 제거 | \`str.replace\` + \`astype\` | 텍스트 → 숫자 변환 |
 
-표로 만들면 \`표1[매출]\`처럼 **구조적 참조**가 가능해 수식이 읽기 쉬워집니다.
+> 정형화가 끝나면 \`df.head()\`와 \`df.dtypes\`로 **행 구조와 데이터 타입**을 꼭 확인하세요. 매출 열이 \`object\`(문자)로 남아 있으면 통계가 계산되지 않습니다.`,
+      contentEn: `Real-world data rarely arrives as clean CSV. It is usually embedded as tables inside reports, quotes, and quality sheets. This practice converts a table from a chemical/manufacturing SME report into an analysis-ready structured table.
 
-### 2. 원본 갱신 시 새로고침
+**BEFORE** problems: merged cells and duplicate headers break the one-header-per-row rule; units and date formats are inconsistent; total/subtotal rows mix in with real observations and distort aggregates; some cells are missing.
 
-1. 원본 표에 새 데이터를 붙여 넣습니다(표라면 자동 확장).
-2. 데이터 → **모두 새로 고침**(또는 \`Alt + F5\`)으로 피벗·연결을 갱신합니다.
-3. 외부 데이터 연결은 연결 속성에서 **파일 열 때 새로 고침**을 켭니다.
+**AFTER** follows tidy-data principles: one observation per row, one variable per column. Calculated rows (totals) are separated, and each column holds a single data type (the revenue column is all numeric).
 
-### 3. KPI 카드에 GETPIVOTDATA 연동
+To extract with generative AI, upload the image/PDF and prompt explicitly: "Convert this table image into an analysis-ready structured table (CSV). Exclude total rows, normalize dates to YYYY-MM-DD, split units into a separate column, and keep blanks as missing values." Specifying the rules prevents the model from inventing values.
 
-피벗 값을 대시보드 카드 셀에 직접 끌어옵니다. 피벗 셀을 \`=\`로 참조하면 자동으로 함수가 생성됩니다.
-
-    =GETPIVOTDATA("매출", $A$3, "부서", "영업", "월", 6)
-
-| 인수 | 의미 |
-|------|------|
-| "매출" | 가져올 값 필드 |
-| \$A\$3 | 피벗테이블의 기준 셀 |
-| "부서","영업" | 필터 조건(필드, 값) 쌍 |
-
-이렇게 하면 피벗이 새로고침되어 값이 바뀌어도 **KPI 카드가 자동으로 따라 갱신**됩니다.
-
-### 자동화 마무리 단계
-
-1. 원본 = 표(\`Ctrl + T\`)로 변환합니다.
-2. 피벗·차트는 표를 원본으로 지정합니다.
-3. KPI 카드는 \`GETPIVOTDATA\`로 연결합니다.
-4. "파일 열 때 새로 고침"을 켭니다.
-5. 색·레이아웃은 잠그고(시트 보호), 입력 영역만 풀어둡니다.
-
-> \`GETPIVOTDATA\`가 거슬리면 피벗 분석 → 옵션 → "GETPIVOTDATA 생성" 끄기로 일반 참조도 쓸 수 있습니다. 단, 자동 갱신 안정성은 \`GETPIVOTDATA\`가 더 높습니다.`,
-      contentEn: `Build a template once and reuse it: dynamic ranges + refresh + dynamic references.
-
-### 1. Dynamic Ranges
-
-| Method | Steps | Benefit |
-|--------|-------|---------|
-| Excel Table | Select → \`Ctrl + T\` | Range auto-expands on new rows |
-| Named Range | Formulas → Name Manager → \`OFFSET\`/\`INDEX\` | Reference by name in charts |
-
-### 2. Refresh on Source Change
-
-1. Paste new rows (tables auto-expand). 2. Data → Refresh All (\`Alt + F5\`). 3. Enable "Refresh on open" for connections.
-
-### 3. KPI Cards with GETPIVOTDATA
-
-    =GETPIVOTDATA("Sales", $A$3, "Dept", "Sales", "Month", 6)
-
-KPI cards auto-update when the pivot refreshes.
-
-### Automation Steps
-
-1. Convert source to a Table. 2. Point pivots/charts at it. 3. Link KPI cards via \`GETPIVOTDATA\`. 4. Enable refresh-on-open. 5. Protect layout, unlock input cells.
-
-> You can disable GETPIVOTDATA generation in PivotTable Options, but it is the most stable for auto-refresh.`,
+The Gemini-generated cleaning code drops empty rows, filters out total rows, normalizes dates with \`pd.to_datetime\`, and strips thousands separators before casting to int. Always verify with \`df.head()\` and \`df.dtypes\`: if the revenue column stays \`object\`, statistics will not compute.`,
     },
     {
-      title: '[실습] 종합 — 부서 KPI 대시보드 완성',
-      titleEn: '[Practice] Capstone — Completing a Department KPI Dashboard',
-      content: `1~4단계를 모두 합쳐 **하나의 부서 KPI 모니터링 대시보드**를 완성하는 미니 프로젝트입니다. 영업부 월별 데이터를 예로 진행합니다.
+      title: '통계 수치 분석 & 핵심 지표 도출',
+      titleEn: 'Statistical Analysis & Deriving Key Metrics',
+      content: `정형화가 끝났으면 이제 **숫자가 무엇을 말하는지** 읽을 차례입니다. 현장에서 실제로 보는 통계 지표는 의외로 많지 않습니다. 아래 5가지면 매출·생산·품질 데이터 대부분을 설명할 수 있습니다.
 
-### 단계별 체크리스트
+### 현장에서 꼭 보는 통계 지표
 
-1. **데이터 준비** — 원본을 표(\`Ctrl + T\`)로 변환합니다. (부서·월·매출·목표·달성률 컬럼)
-2. **KPI 정의** — 핵심 3개를 고릅니다: 총매출, 목표 달성률, 신규 고객 수.
-3. **피벗 구성** — KPI별 피벗테이블을 만들고 \`GETPIVOTDATA\`로 상단 **KPI 카드 3장**을 연결합니다.
-4. **추세 차트** — 월별 매출 피벗 차트(꺾은선)와 부서별 비교(묶은 막대)를 배치합니다.
-5. **인-셀 시각화** — 상세 표에 달성률 데이터 막대 + 월별 스파크라인을 추가합니다.
-6. **컨트롤 연결** — 슬라이서(부서)와 시간 표시 막대(월)를 삽입해 **모든 차트·카드에 보고서 연결**합니다.
-7. **레이아웃 정리** — 눈금선 끄기, 카드/차트 정렬, 제목·갱신일자 표시, 시트 보호.
+| 지표 | 무엇을 알려주나 | 언제 쓰나 |
+|------|----------------|----------|
+| 평균 / 중앙값 | 대표값(가운데 값) | 분포가 한쪽으로 치우치면 **중앙값** 사용 |
+| 표준편차 | 흩어진 정도 = **변동성** | 품질·생산이 들쭉날쭉한지 점검 |
+| 최소 / 최대 / 사분위 | 범위와 이상치 탐지(IQR) | 불량 스파이크, 비정상 거래 찾기 |
+| 상관계수 | 두 변수 관계 강도(−1 ~ +1) | 생산량↑일 때 불량률↑인지 등 |
 
-### 대시보드 영역 배치(권장)
+### 평균 vs 중앙값 — 이상치의 함정
 
-| 영역 | 내용 |
-|------|------|
-| 상단 | KPI 카드 3장(총매출·달성률·신규 고객) |
-| 중앙 | 월별 매출 추세(꺾은선) + 부서 비교(막대) |
-| 우측 | 슬라이서(부서) · 시간 표시 막대(월) |
-| 하단 | 상세 표(데이터 막대 + 스파크라인) |
+다섯 거래처의 월 매출(만원)이 다음과 같다고 합시다.
 
-### 완성 기준
+\`\`\`python
+import pandas as pd
 
-| 기준 | 통과 조건 |
-|------|----------|
-| 한 화면 | 스크롤 없이 핵심 KPI·차트가 보인다 |
-| 인터랙션 | 슬라이서/타임라인 클릭 시 모든 요소가 동시 갱신된다 |
-| 자동 갱신 | 원본에 행 추가 후 "모두 새로 고침"만으로 반영된다 |
-| 가독성 | 색·아이콘이 절제되고 시선 흐름이 자연스럽다 |
+sales = pd.Series([800, 850, 900, 950, 9000])  # 마지막은 대형 단발 수주
+print("평균:", sales.mean())     # 2500
+print("중앙값:", sales.median())  # 900
+\`\`\`
 
-> 막히면 "데이터 → 피벗 → 컨트롤 → 레이아웃" 순서를 지키세요. 레이아웃부터 만들면 데이터 연결이 꼬이기 쉽습니다.`,
-      contentEn: `Combine steps 1-4 into one Department KPI monitoring dashboard. Use monthly sales data as an example.
+- **평균 2,500만원**은 9,000짜리 한 건에 끌려 올라가 "보통 거래처"를 전혀 대표하지 못합니다.
+- **중앙값 900만원**이 실제 전형적인 거래 규모에 훨씬 가깝습니다.
 
-### Checklist
+> 한두 개의 큰 값(대형 수주, 측정 오류)이 섞여 있으면 평균은 거짓말을 합니다. **분포가 치우치면 중앙값**을 함께 보세요.
 
-1. Convert source to a Table. 2. Pick 3 KPIs (revenue, target rate, new customers). 3. Build pivots, link 3 KPI cards via \`GETPIVOTDATA\`. 4. Add trend chart (line) + comparison (bars). 5. Add data bars + sparklines to the detail table. 6. Insert slicer (dept) + timeline (month), link to all. 7. Clean layout, protect sheet.
+### 변동성 — 표준편차 읽기
 
-### Layout
+\`\`\`python
+df[["매출", "생산량", "불량률"]].describe()
+\`\`\`
 
-| Zone | Content |
-|------|---------|
-| Top | 3 KPI cards |
-| Center | Trend (line) + comparison (bars) |
-| Right | Slicer + Timeline |
-| Bottom | Detail table (bars + sparklines) |
+\`describe()\`는 개수·평균·표준편차·최소·사분위·최대를 한 번에 줍니다. 표준편차가 평균 대비 크면 **그 지표가 불안정**하다는 뜻입니다.
 
-### Pass Criteria
+### 예시 해석 — 월별 매출/생산 추이
 
-| Criterion | Condition |
-|-----------|-----------|
-| One screen | KPIs/charts visible without scrolling |
-| Interaction | All elements update on slicer/timeline click |
-| Auto-refresh | New rows reflected via Refresh All |
-| Readability | Restrained colors, natural flow |
+> "최근 3개월 매출이 **+28% 상승**했으나, 같은 기간 매출 **표준편차도 확대**됨. → 전체적으로 **성장 추세**는 분명하지만, 월별 **변동성이 커지고 있어** 특정 대형 거래처 의존도와 공급 안정성을 함께 점검할 필요가 있음."
 
-> Follow Data → Pivot → Controls → Layout. Starting from layout tangles the data links.`,
+숫자 하나가 아니라 **추세(평균)와 안정성(표준편차)을 함께** 읽는 것이 핵심입니다.`,
+      contentEn: `Once the data is structured, the next step is reading what the numbers say. In practice only a handful of metrics are needed: mean/median (central tendency, use the median when the distribution is skewed), standard deviation (spread = volatility), min/max/quartiles (range and outlier detection via IQR), and correlation (strength of relationship between two variables, −1 to +1).
+
+The mean-vs-median trap matters most. For monthly sales of [800, 850, 900, 950, 9000], the mean (2500) is dragged up by one large one-off order and misrepresents a typical client, while the median (900) is far closer to reality. When a few large values or measurement errors are present, the mean lies — always check the median for skewed distributions.
+
+\`df.describe()\` returns count, mean, std, min, quartiles, and max at once. A large standard deviation relative to the mean signals instability. A sample reading: revenue rose +28% over three months but its standard deviation also widened — a clear growth trend with rising volatility, warranting a check on large-client dependence and supply stability. Read the trend (mean) and the stability (std) together, not a single number.`,
     },
     {
-      title: '모듈 3 정리 & 과정 마무리',
-      titleEn: 'Module 3 Wrap-up & Course Conclusion',
+      title: '[실습] 키워드 추출 & 데이터 시각화 — 워드클라우드',
+      titleEn: '[Practice] Keyword Extraction & Word Cloud Visualization',
+      content: `숫자만 데이터가 아닙니다. **고객 리뷰·문의·점검 코멘트** 같은 텍스트도 중요한 데이터입니다. 이 실습에서는 텍스트에서 핵심 키워드를 뽑아 **워드클라우드**로 한눈에 보여줍니다.
+
+### 텍스트 분석 3단계
+
+1. **텍스트 수집** — 제품 리뷰, 고객 문의, 품질 점검 코멘트 등을 모읍니다.
+2. **키워드 추출** — 한글 형태소 분석으로 **명사만** 뽑고 빈도를 셉니다.
+3. **시각화** — 빈도가 높은 단어일수록 **크게** 표시(워드클라우드).
+
+### 왜 명사만 뽑나?
+
+"이/가/하다/그리고" 같은 조사·접속사는 빈도는 높지만 의미가 없습니다. **명사(제품·문제·감정 단어)**가 고객이 진짜 말하는 주제를 담습니다.
+
+### 코드 — 빈도 계산과 워드클라우드
+
+\`\`\`python
+from collections import Counter
+from wordcloud import WordCloud
+
+# 1. 한글 형태소에서 명사만 추출
+words = extract_nouns(reviews)   # 예: ["냄새", "포장", "배송", "냄새", ...]
+
+# 2. 빈도 계산
+freq = Counter(words)            # {"냄새": 14, "배송": 9, ...}
+
+# 3. 워드클라우드 생성 (한글 폰트 필수)
+wc = WordCloud(
+    font_path="NanumGothic.ttf",  # 한글이 깨지면 폰트부터 확인
+    background_color="white",
+)
+wc.generate_from_frequencies(freq)
+wc.to_image()
+\`\`\`
+
+| 단계 | 도구 | 핵심 |
+|------|------|------|
+| 명사 추출 | 형태소 분석기 | 의미 단어만 남김 |
+| 빈도 계산 | \`Counter\` | 단어 → 등장 횟수 |
+| 시각화 | \`WordCloud\` | 빈도 → 글자 크기 |
+
+> **한글이 네모(□)로 깨지면** 거의 항상 \`font_path\` 문제입니다. NanumGothic 같은 한글 폰트 경로를 반드시 지정하세요.
+
+### 결과 읽기
+
+워드클라우드에서 "냄새", "포장", "지연"이 크게 보인다면, 고객이 **무엇을 가장 많이 언급하는지**가 즉시 드러납니다. 빈도는 곧 **관심·불만의 크기**입니다. 단, 워드클라우드는 "어떤 단어가 많은가"는 보여주지만 "긍정인가 부정인가"는 알려주지 않으므로, 원문 일부를 함께 확인합니다.`,
+      contentEn: `Numbers are not the only data. Customer reviews, inquiries, and inspection comments are valuable text data. This practice extracts key terms from text and shows them at a glance as a word cloud.
+
+The pipeline has three steps: collect text (reviews, inquiries, QC comments); extract keywords by running Korean morphological analysis to keep only nouns and counting their frequency; and visualize, drawing more frequent words larger. Only nouns are kept because particles and conjunctions are frequent but meaningless — nouns carry the topics customers actually talk about.
+
+The code extracts nouns, counts them with \`Counter\`, and feeds the frequencies to \`WordCloud\`. A Korean font path (e.g., NanumGothic.ttf) is mandatory; if Korean renders as boxes, the \`font_path\` is almost always the cause. If "smell", "packaging", or "delay" appear large, you instantly see what customers mention most — frequency reflects the size of interest or complaint. Word clouds show what is frequent but not whether it is positive or negative, so confirm with sample source text.`,
+    },
+    {
+      title: '분석 결과 기반 인사이트 도출·요약',
+      titleEn: 'Deriving and Summarizing Insights from Analysis',
+      content: `통계 수치와 워드클라우드를 만들었다고 분석이 끝난 게 아닙니다. **"그래서 무엇을 할까?"로 번역**해야 비로소 가치가 생깁니다. 이 단계가 분석가와 단순 집계의 차이를 만듭니다.
+
+### 인사이트 문장 작성법 — 현황 → 원인 가설 → 액션
+
+좋은 인사이트는 항상 이 3단 구조를 가집니다.
+
+| 단계 | 내용 | 예시 |
+|------|------|------|
+| ① 현황 (What) | 데이터가 보여주는 사실 | "3개월 매출 +28%, 변동성 확대" |
+| ② 원인 가설 (Why) | 왜 그런가에 대한 추정 | "대형 거래처 1곳 의존도 상승 추정" |
+| ③ 액션 (So what) | 무엇을 할 것인가 | "신규 거래처 발굴로 의존도 분산 제안" |
+
+### 나쁜 요약 vs 좋은 요약
+
+> ❌ **나쁜 예**: "매출이 올랐고 리뷰에 '냄새'가 많았습니다." (사실 나열일 뿐)
+
+> ✅ **좋은 예**: "매출은 +28% 성장했으나 단일 대형 거래처 의존이 커져(변동성↑) 안정성 위험이 있고, 동시에 리뷰에서 '냄새' 언급이 급증해 제품 후처리 공정 점검이 필요합니다. → **거래처 다변화**와 **품질 클레임 원인 분석**을 우선 과제로 제안합니다."
+
+좋은 요약은 **숫자 + 해석 + 다음 행동**이 한 문장 안에 연결됩니다.
+
+### 데이터 기반 요약 보고 팁
+
+1. **결론 먼저** — 가장 중요한 한 줄을 맨 위에. 보고받는 사람은 1분 안에 핵심을 알고 싶어 합니다.
+2. **숫자에 단위와 기준 기간** — "+28%"가 아니라 "최근 3개월 대비 +28%".
+3. **차트는 메시지당 하나** — 한 차트가 한 가지 주장을 하도록.
+4. **불확실성은 가설로 표현** — "추정", "필요" 같은 표현으로 확정과 가설을 구분.
+
+> 분석 보고의 목표는 "내가 분석을 많이 했다"가 아니라 **"의사결정자가 다음 행동을 결정할 수 있게 하는 것"**입니다. 액션이 없는 인사이트는 미완성입니다.`,
+      contentEn: `Producing statistics and a word cloud is not the end of analysis. Value appears only when you translate findings into "so what should we do?" — this is what separates an analyst from a simple aggregator.
+
+Good insights follow a three-part structure: the current state (what the data shows), a cause hypothesis (why it might be happening), and an action (what to do). A weak summary just lists facts ("sales rose and reviews mentioned 'smell'"). A strong one connects number, interpretation, and next action in one thread: revenue grew +28% but rising single-client dependence creates stability risk, while a surge in "smell" mentions calls for a post-processing review — so client diversification and a quality-claim root-cause analysis become the priorities.
+
+Reporting tips: lead with the conclusion (the reader wants the key point in a minute); attach units and a reference period to every number ("+28% vs. the last three months"); keep one chart per message; and express uncertainty as a hypothesis using words like "estimated" or "needs". An insight without an action is unfinished — the goal is to let the decision-maker choose the next step.`,
+    },
+    {
+      title: '모듈 3 정리 & 체크리스트',
+      titleEn: 'Module 3 Wrap-up & Checklist',
       content: `### 모듈 3 핵심 요약
 
 | 단계 | 핵심 도구 | 요점 |
 |------|----------|------|
-| 인-셀 시각화 | 조건부 서식·데이터 막대·스파크라인 | 표를 차트 없이 읽히게 |
-| 기획 | KPI 정의·와이어프레임 | 차트보다 설계가 먼저 |
-| 인터랙션 | 피벗 차트·슬라이서·타임라인 | 클릭 한 번으로 동시 갱신 |
-| 자동화 | 표·새로고침·\`GETPIVOTDATA\` | 만들고 계속 쓰는 템플릿 |
-| 종합 | 부서 KPI 대시보드 | 위 4가지를 한 화면에 |
+| 표 정형화 | 프롬프트 + pandas | 비정형 표 → tidy data(1관측=1행) |
+| 통계 분석 | \`describe()\`·평균/중앙값·표준편차 | 추세와 변동성을 함께 읽기 |
+| 텍스트 시각화 | 형태소 + \`WordCloud\` | 빈도 → 글자 크기로 핵심어 강조 |
+| 인사이트 | 현황 → 원인 → 액션 | 숫자를 "다음 행동"으로 번역 |
 
-### 대시보드 점검 체크리스트
+### 실습 체크리스트
 
-1. 핵심 KPI가 상단·좌측에 우선 배치되어 있는가?
-2. 스크롤 없이 한 화면에 들어오는가?
-3. 슬라이서/타임라인이 모든 요소에 연결되어 동시 갱신되는가?
-4. 원본 갱신이 "모두 새로 고침"만으로 반영되는가?
-5. 색·아이콘이 절제되어 강조가 분명한가?
-6. 제목·기준 기간·갱신일자가 표시되어 있는가?
+- [ ] 보고서 속 표를 정형 테이블(CSV)로 변환했다 (합계 행 분리, 날짜 통일)
+- [ ] tidy 원칙(1관측치=1행, 1변수=1열)에 맞는지 \`df.head()\`로 확인했다
+- [ ] 평균·중앙값·표준편차를 확인하고, 분포가 치우치면 중앙값을 함께 봤다
+- [ ] 두 지표(예: 생산량·불량률)의 상관계수를 점검했다
+- [ ] 리뷰 텍스트로 워드클라우드를 생성했다 (한글 폰트 적용)
+- [ ] "현황 → 원인 가설 → 액션" 구조로 인사이트 1문장을 작성했다
 
-### 전체 과정 회고 — EDA → 시각화 → 대시보드
+### 자주 막히는 부분
 
-이번 과정은 데이터를 다루는 세 단계를 차례로 익혔습니다.
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 통계가 계산 안 됨 | 숫자 열이 문자(object) | \`astype(int)\`로 변환 |
+| 평균이 이상함 | 합계 행/이상치 포함 | 합계 분리, 중앙값 확인 |
+| 워드클라우드 □ 깨짐 | 한글 폰트 미지정 | \`font_path\` 설정 |
 
-| 모듈 | 주제 | 핵심 역량 |
-|------|------|----------|
-| 1 | 탐색적 데이터 분석(EDA) | 데이터 정제·구조 파악·요약 통계 |
-| 2 | 시각화 | 목적에 맞는 차트 선택과 표현 |
-| 3 | 대시보드 | KPI 종합·인터랙션·자동화 |
+### 다음 모듈 예고
 
-### 현업 적용 제언
-
-1. **작게 시작하기** — 완벽한 대시보드보다 KPI 3개짜리 한 장부터 운영합니다.
-2. **자동 갱신을 기본으로** — 수작업 업데이트는 곧 방치로 이어집니다. 표·새로고침을 처음부터 설계하세요.
-3. **보는 사람 기준** — 만든 사람이 아니라 의사결정자가 1분 안에 읽을 수 있어야 합니다.
-4. **정기 점검** — KPI는 상황에 따라 바뀝니다. 분기마다 지표가 여전히 유효한지 검토합니다.
-
-> 데이터 분석의 끝은 "예쁜 차트"가 아니라 "더 나은 결정"입니다. 대시보드는 그 결정을 빠르게 돕는 도구일 뿐임을 기억하세요. 수고하셨습니다.`,
-      contentEn: `### Module 3 Summary
+> **모듈 4 — 고객 반응 데이터 수집 및 분석**
+> 이번 모듈에서 정제·통계·텍스트 분석의 기초를 익혔습니다. 다음 모듈에서는 **고객 반응 데이터를 직접 수집**하고, 수집한 데이터를 분석해 제품·서비스 개선으로 연결하는 흐름을 다룹니다. 수고하셨습니다.`,
+      contentEn: `### Summary
 
 | Stage | Tools | Point |
 |-------|-------|-------|
-| In-cell | Conditional formatting, data bars, sparklines | Readable without charts |
-| Planning | KPIs, wireframe | Design before charting |
-| Interaction | Pivot charts, slicers, timeline | One click updates all |
-| Automation | Tables, refresh, \`GETPIVOTDATA\` | Build once, reuse |
-| Capstone | Department KPI dashboard | All four on one screen |
+| Structuring | Prompt + pandas | Messy table → tidy data |
+| Statistics | \`describe()\`, mean/median, std | Read trend and volatility together |
+| Text viz | Morphology + \`WordCloud\` | Frequency → font size |
+| Insight | State → cause → action | Translate numbers into next steps |
 
-### Dashboard Checklist
+### Checklist
 
-1. Core KPIs top-left? 2. Fits one screen? 3. Controls linked to all? 4. Auto-refresh works? 5. Restrained colors? 6. Title/period/date shown?
+- [ ] Converted a report table into a structured CSV (totals separated, dates normalized)
+- [ ] Verified tidy structure (one observation per row, one variable per column) with \`df.head()\`
+- [ ] Checked mean, median, and std; used the median for skewed distributions
+- [ ] Inspected the correlation between two metrics (e.g., output vs. defect rate)
+- [ ] Generated a word cloud from review text (with a Korean font)
+- [ ] Wrote one insight in the State → Cause → Action structure
 
-### Course Recap — EDA → Visualization → Dashboard
+### Common pitfalls: statistics fail when numeric columns stay as text (cast with \`astype\`); a strange mean usually means total rows or outliers are included (separate them, check the median); a broken (□) word cloud means the Korean font path is missing.
 
-| Module | Topic | Skill |
-|--------|-------|-------|
-| 1 | EDA | Cleaning, structure, summary stats |
-| 2 | Visualization | Choosing the right chart |
-| 3 | Dashboard | Combining KPIs, interaction, automation |
-
-### Applying at Work
-
-1. Start small (3 KPIs). 2. Make auto-refresh the default. 3. Design for the reader, not the maker. 4. Review KPIs quarterly.
-
-> The end of analysis is "better decisions", not "pretty charts". Well done.`,
+### Next: **Module 4 — Collecting and Analyzing Customer Response Data.** Having learned the basics of cleaning, statistics, and text analysis, the next module covers collecting customer-response data directly and turning it into product and service improvements.`,
     },
   ],
 };
@@ -392,16 +294,16 @@ export default function Module3() {
       <section className="page-header-ed">
         <div className="container">
           <div className="eyebrow">Module 03</div>
-          <h2>{isKo ? '실무형 시각화 대시보드 구축' : 'Building Practical Visualization Dashboards'}</h2>
-          <p>{isKo ? '인사이트를 한 화면에 담는 대시보드 구현 · 2.0H' : 'Capturing insights on a single dashboard screen · 2.0H'}</p>
+          <h2>{isKo ? '비즈니스 데이터 정제 및 통계 분석' : 'Business Data Cleaning and Statistics'}</h2>
+          <p>{isKo ? '표 데이터 정형화 · 통계 지표 · 키워드 시각화 · 1.0H' : 'Table cleaning, statistics, keyword viz · 1.0H'}</p>
         </div>
       </section>
       <GuidePage
-        seoTitle="실무형 시각화 대시보드 구축"
-        seoTitleEn="Building Practical Visualization Dashboards"
-        seoDescription="조건부 서식·스파크라인부터 피벗 차트·슬라이서·자동 갱신 리포트까지, 실무형 KPI 대시보드를 단계별로 구축합니다."
+        seoTitle="모듈 3 · 비즈니스 데이터 정제 및 통계 분석"
+        seoTitleEn="Module 3 · Business Data Cleaning and Statistics"
+        seoDescription="문서 내 표 데이터 정형화, 통계 수치 분석과 핵심 지표 도출, 키워드 추출 기반 워드클라우드 시각화를 다루는 실습 강의안"
         path="/module3"
-        dataFiles={[module3Dashboard]}
+        dataFiles={[module3Data]}
       />
     </>
   );
