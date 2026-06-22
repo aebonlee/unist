@@ -43,6 +43,7 @@ const Examples = lazy(() => import('../pages/Examples'));
 const PromptLearn = lazy(() => import('../pages/prompt/PromptLearn'));
 const PromptPractice = lazy(() => import('../pages/prompt/PromptPractice'));
 const PromptCases = lazy(() => import('../pages/prompt/PromptCases'));
+const PromptEvaluate = lazy(() => import('../pages/prompt/PromptEvaluate'));
 const Playground = lazy(() => import('../pages/Playground'));
 const AdminAllocation = lazy(() => import('../pages/AdminAllocation'));
 
@@ -103,6 +104,7 @@ const PublicLayout = (): ReactElement => {
             <Route path="/prompt/learn" element={<PromptLearn />} />
             <Route path="/prompt/practice" element={<PromptPractice />} />
             <Route path="/prompt/cases" element={<PromptCases />} />
+            <Route path="/prompt/evaluate" element={<PromptEvaluate />} />
             {site.features.auth && (
               <>
                 <Route path="/playground" element={<AuthGuard><Playground /></AuthGuard>} />

@@ -120,6 +120,7 @@ const site: SiteConfig = {
         { path: '/prompt/learn', labelKey: '프롬프트 학습' },
         { path: '/prompt/practice', labelKey: '프롬프트 실습' },
         { path: '/prompt/cases', labelKey: '프롬프트 사례' },
+        { path: '/prompt/evaluate', labelKey: '프롬프트 평가' },
       ]
     },
     { labelKey: 'AI 실습실', path: '/playground', activePath: '/playground' },
