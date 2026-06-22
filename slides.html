@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>데이터 분석 실습 &amp; 시각화 · 강의안 슬라이드</title>
+<meta name="description" content="2026 KERIS 공통직무 · 데이터 분석 실습 & 시각화 강의안 프레젠테이션. EDA → 시각화 → 대시보드 1일 6시간 중급 과정." />
+<meta name="theme-color" content="#1B2A4A" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<style>
+  :root{
+    --navy:#1B2A4A; --navy-2:#142036; --navy-3:#0d1626;
+    --accent:#3D7DFF; --accent-soft:#6fa0ff;
+    --ink:#eef2fb; --muted:#9fb0cf; --line:rgba(255,255,255,.12);
+    --card:rgba(255,255,255,.05); --card-2:rgba(255,255,255,.08);
+    --good:#2ecc8f; --warn:#ffb347; --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    background:var(--navy-3); color:var(--ink);
+    -webkit-font-smoothing:antialiased; overflow:hidden;
+  }
+
+  /* ===== Deck ===== */
+  .deck{position:fixed;inset:0}
+  .slide{
+    position:absolute;inset:0;
+    display:none; flex-direction:column;
+    padding:6vh 7vw 9vh;
+    background:radial-gradient(120% 90% at 80% -10%, #21345b 0%, var(--navy) 42%, var(--navy-3) 100%);
+    opacity:0; transition:opacity .35s ease;
+    overflow:auto;
+  }
+  .slide.active{display:flex; opacity:1}
+  .slide h1,.slide h2{line-height:1.15;letter-spacing:-.02em}
+
+  .eyebrow{
+    display:inline-block;font-size:clamp(.72rem,1.3vw,.95rem);font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--accent-soft);
+    border:1px solid var(--line);border-radius:999px;padding:.35em 1em;margin-bottom:1.2rem;
+    background:var(--card);
+  }
+  .slide h2{font-size:clamp(1.6rem,4.2vw,3.1rem);font-weight:800;margin-bottom:.7rem}
+  .slide .sub{color:var(--muted);font-size:clamp(.95rem,1.9vw,1.3rem);margin-bottom:2rem;font-weight:500}
+  .accent{color:var(--accent-soft)}
+  mark{background:linear-gradient(transparent 55%, rgba(61,125,255,.45) 55%);color:inherit;padding:0 .1em;border-radius:2px}
+
+  ul.points{list-style:none;display:flex;flex-direction:column;gap:1rem;max-width:60ch}
+  ul.points li{position:relative;padding-left:1.9rem;font-size:clamp(1rem,2vw,1.35rem);line-height:1.5}
+  ul.points li::before{content:"";position:absolute;left:0;top:.55em;width:.7rem;height:.7rem;border-radius:3px;background:var(--accent);transform:rotate(45deg)}
+  ul.points li b{color:#fff}
+  ul.points li small{display:block;color:var(--muted);font-size:.82em;margin-top:.2rem;font-weight:500}
+
+  /* cards grid */
+  .grid{display:grid;gap:1.1rem;margin-top:.5rem}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.4rem}
+  .card .k{font-size:clamp(.95rem,1.6vw,1.15rem);font-weight:800;color:#fff;margin-bottom:.45rem;display:flex;align-items:center;gap:.5rem}
+  .card .v{color:var(--muted);font-size:clamp(.85rem,1.5vw,1rem);line-height:1.5}
+  .num{font-size:1.4rem;color:var(--accent-soft);font-weight:900}
+
+  table{border-collapse:collapse;width:100%;margin-top:.6rem;font-size:clamp(.82rem,1.55vw,1.05rem)}
+  th,td{text-align:left;padding:.7em .9em;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--accent-soft);font-weight:700;background:rgba(255,255,255,.03)}
+  td b{color:#fff}
+  tr td:first-child{color:#fff;font-weight:600}
+
+  .formula{font-family:"SFMono-Regular",Consolas,monospace;background:var(--navy-3);border:1px solid var(--line);
+    border-radius:12px;padding:1rem 1.3rem;font-size:clamp(1rem,2.1vw,1.45rem);color:var(--accent-soft);display:inline-block;margin:.4rem 0 1rem}
+  .callout{border-left:4px solid var(--accent);background:var(--card);border-radius:0 12px 12px 0;
+    padding:1rem 1.3rem;margin-top:1.3rem;color:var(--ink);font-size:clamp(.92rem,1.7vw,1.18rem);line-height:1.55;max-width:75ch}
+  .callout b{color:#fff}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;align-items:start}
+  @media (max-width:820px){.two-col,.g2,.g3{grid-template-columns:1fr}}
+
+  /* steps */
+  ol.steps{counter-reset:s;list-style:none;display:flex;flex-direction:column;gap:.8rem;max-width:70ch}
+  ol.steps li{counter-increment:s;position:relative;padding-left:3rem;font-size:clamp(.95rem,1.7vw,1.2rem);line-height:1.45}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:-.1em;width:2rem;height:2rem;border-radius:50%;
+    background:var(--accent);color:#fff;font-weight:800;display:grid;place-items:center;font-size:.95rem}
+
+  /* ===== Cover ===== */
+  .cover{justify-content:center;background:radial-gradient(130% 120% at 15% 10%, #2a4374 0%, var(--navy) 45%, var(--navy-3) 100%)}
+  .cover .kicker{color:var(--accent-soft);font-weight:700;letter-spacing:.22em;text-transform:uppercase;font-size:clamp(.8rem,1.6vw,1.05rem);margin-bottom:1.2rem}
+  .cover h1{font-size:clamp(2.4rem,7vw,5rem);font-weight:900;letter-spacing:-.03em;background:linear-gradient(120deg,#fff 30%,var(--accent-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover .tag{color:var(--muted);font-size:clamp(1rem,2.3vw,1.5rem);margin-top:1.1rem;font-weight:500;max-width:50ch}
+  .cover .meta{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:2.4rem}
+  .pill{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:.5em 1.1em;font-size:clamp(.78rem,1.4vw,1rem);color:var(--ink)}
+  .pill b{color:var(--accent-soft)}
+  .cover .by{position:absolute;bottom:8vh;left:7vw;color:var(--muted);font-size:.95rem}
+  .cover .by b{color:#fff}
+
+  /* ===== Divider ===== */
+  .divider{justify-content:center;background:linear-gradient(135deg,var(--navy-2),var(--navy-3))}
+  .divider .mnum{font-size:clamp(4rem,16vw,12rem);font-weight:900;line-height:.85;color:rgba(61,125,255,.18);letter-spacing:-.05em}
+  .divider h2{font-size:clamp(2rem,6vw,4rem);margin-top:-2vh}
+  .divider .sub{font-size:clamp(1rem,2.3vw,1.5rem)}
+  .divider .topics{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.4rem}
+  .divider .topics span{border:1px solid var(--line);border-radius:999px;padding:.45em 1em;color:var(--muted);font-size:clamp(.8rem,1.5vw,1.05rem)}
+
+  .lab{display:inline-block;background:var(--accent);color:#fff;font-weight:800;font-size:.7em;padding:.2em .7em;border-radius:6px;letter-spacing:.04em;vertical-align:middle;margin-right:.5rem}
+
+  /* ===== Chrome ===== */
+  .progress{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent-soft));z-index:50;transition:width .35s ease}
+  .hud{position:fixed;bottom:2.2vh;right:3vw;z-index:40;display:flex;align-items:center;gap:1rem;color:var(--muted);font-size:.9rem}
+  .hud .brand{font-weight:800;color:var(--ink);letter-spacing:-.01em}
+  .hud .brand i{color:var(--accent-soft);font-style:normal}
+  .nav{position:fixed;bottom:2vh;left:3vw;z-index:40;display:flex;gap:.5rem}
+  .nav button{background:var(--card);border:1px solid var(--line);color:var(--ink);width:42px;height:42px;border-radius:50%;font-size:1.1rem;cursor:pointer;transition:.2s}
+  .nav button:hover{background:var(--accent);border-color:var(--accent)}
+  .hint{position:fixed;top:2.2vh;right:3vw;z-index:40;color:var(--muted);font-size:.8rem;opacity:.7}
+  .foot{position:absolute;bottom:3.5vh;left:7vw;color:var(--muted);font-size:.8rem;opacity:.6}
+
+  /* ===== Print → PDF ===== */
+  @media print{
+    @page{size:1280px 720px;margin:0}
+    body{overflow:visible}
+    .progress,.hud,.nav,.hint{display:none!important}
+    .deck{position:static}
+    .slide{display:flex!important;opacity:1!important;position:relative;page-break-after:always;height:720px;width:1280px;overflow:hidden}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · Cover -->
+  <section class="slide cover active">
+    <div class="kicker">2026 KERIS 교육과정(안) · 공통직무 · 중급</div>
+    <h1>데이터 분석 실습<br>&amp; 시각화</h1>
+    <p class="tag">엑셀 기반 EDA · 시각화 · 대시보드 구축 실습으로<br>데이터 기반 의사결정 역량을 키우는 <mark>1일 6시간</mark> 과정</p>
+    <div class="meta">
+      <span class="pill"><b>EDA</b> 탐색적 분석</span>
+      <span class="pill"><b>Visualization</b> 시각화 원리</span>
+      <span class="pill"><b>Dashboard</b> 실무 대시보드</span>
+      <span class="pill"><b>Tool</b> Microsoft Excel</span>
+    </div>
+    <div class="by">강의안 · <b>Data Lab</b> · 드림아이티비즈(DreamIT Biz) &nbsp;|&nbsp; data.dreamitbiz.com</div>
+  </section>
+
+  <!-- 2 · Course Overview -->
+  <section class="slide">
+    <span class="eyebrow">Course Overview</span>
+    <h2>과정 개요</h2>
+    <p class="sub">데이터를 "정제하고 → 보여주고 → 결정으로 잇는" 3단계 흐름을 하루에 익힙니다.</p>
+    <div class="grid g3">
+      <div class="card"><div class="k">🎯 교육 목표</div><div class="v">데이터 분석·시각화의 핵심 원리를 이해하고, 엑셀 실습을 통해 <b>데이터 기반 의사결정 역량</b>을 내재화합니다.</div></div>
+      <div class="card"><div class="k">⏱ 시간 / 레벨</div><div class="v"><b>1일 6시간 · 중급</b><br>모듈 3개 × 각 2.0H</div></div>
+      <div class="card"><div class="k">🧰 사용 도구</div><div class="v">Microsoft Excel<br>피벗테이블 · 조건부 서식 · 슬라이서</div></div>
+    </div>
+    <div class="callout">핵심 키워드 — <b>데이터 분석 · 엑셀 전처리 · EDA · 시각화 · 대시보드.</b> 코딩 없이, 실무에서 가장 많이 쓰는 엑셀만으로 분석의 전 과정을 경험합니다.</div>
+  </section>
+
+  <!-- 3 · Agenda / Timeline -->
+  <section class="slide">
+    <span class="eyebrow">Agenda</span>
+    <h2>오늘의 흐름</h2>
+    <p class="sub">탐색(EDA) → 표현(시각화) → 종합(대시보드)</p>
+    <table>
+      <tr><th>모듈</th><th>주제</th><th>핵심 역량</th><th>시간</th></tr>
+      <tr><td>모듈 1</td><td>탐색적 데이터분석 (EDA)</td><td>데이터 정제 · 구조 파악 · 요약통계 · 패턴 발굴</td><td>2.0H</td></tr>
+      <tr><td>모듈 2</td><td>시각화의 원리 및 기획</td><td>목적에 맞는 차트 선택과 정직한 표현</td><td>2.0H</td></tr>
+      <tr><td>모듈 3</td><td>실무형 대시보드 구축</td><td>KPI 종합 · 인터랙션 · 자동화</td><td>2.0H</td></tr>
+    </table>
+    <div class="callout">분석의 끝은 <b>"예쁜 차트"가 아니라 "더 나은 결정"</b>입니다. 세 모듈은 그 결정에 도달하는 한 줄기 흐름입니다.</div>
+  </section>
+
+  <!-- ===================== MODULE 1 ===================== -->
+  <section class="slide divider">
+    <div class="mnum">01</div>
+    <h2>탐색적 데이터분석 <span class="accent">(EDA)</span></h2>
+    <p class="sub">데이터를 쪼개고 그려보며 패턴·이상치·가설을 발굴한다 · 2.0H</p>
+    <div class="topics"><span>EDA의 본질</span><span>문제·가설 수립</span><span>지표 쪼개기</span><span>시계열·상관·교차</span><span>분포 확인</span></div>
+  </section>
+
+  <!-- M1: What is EDA -->
+  <section class="slide">
+    <span class="eyebrow">Module 1</span>
+    <h2>EDA란 무엇인가</h2>
+    <p class="sub">통계학자 존 튜키 — 모델링 전에 데이터의 구조·패턴·이상치·관계를 탐색하는 과정</p>
+    <div class="two-col">
+      <ul class="points">
+        <li><b>데이터 품질 점검</b><small>결측치·중복·잘못된 단위·비정상 값 발견</small></li>
+        <li><b>가설 발굴</b><small>"이 두 변수는 관련 있을까?" 새로운 질문 생성</small></li>
+        <li><b>이상치 탐지</b><small>평균을 왜곡하는 극단값·입력 오류 탐색</small></li>
+        <li><b>분석 방향 설정</b><small>어떤 변수를 깊게 볼지, 어떤 모델이 적합할지</small></li>
+      </ul>
+      <div>
+        <table>
+          <tr><th>구분</th><th>EDA (탐색)</th><th>CDA (확증)</th></tr>
+          <tr><td>목적</td><td>패턴·가설 발굴</td><td>가설 검증</td></tr>
+          <tr><td>가설</td><td>분석 중 생성</td><td>분석 전 수립</td></tr>
+          <tr><td>도구</td><td>시각화·요약통계</td><td>가설검정·p-value</tr>
+          <tr><td>비유</td><td>탐정의 현장조사</td><td>법정의 증거검증</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="callout">실무에서 EDA는 분석 시간의 <b>60~80%</b>를 차지합니다. "Garbage In, Garbage Out"을 막는 <b>첫 방어선</b>입니다.</div>
+  </section>
+
+  <!-- M1: Problem → Hypothesis -->
+  <section class="slide">
+    <span class="eyebrow">Module 1</span>
+    <h2>문제 정의와 가설 수립</h2>
+    <p class="sub">분석은 "데이터"가 아니라 "문제"에서 출발한다 — 막연한 고민을 답할 수 있는 질문으로</p>
+    <table>
+      <tr><th>막연한 고민</th><th>분석 가능한 질문</th></tr>
+      <tr><td>"매출이 왜 줄었지?"</td><td>최근 3개월간 <b>어느 제품군·지역·채널</b>에서 매출이 가장 많이 감소했는가?</td></tr>
+      <tr><td>"고객이 이탈하는 것 같아"</td><td>가입 후 <b>30일 내 재방문 안 한</b> 고객 비율과 특성은?</td></tr>
+      <tr><td>"마케팅이 효과가 있나?"</td><td>캠페인 전후 2주간 신규 전환율이 <b>유의하게</b> 달라졌는가?</td></tr>
+    </table>
+    <div class="callout">핵심은 <b>측정 가능한 지표 · 명확한 기간 · 비교 대상</b>을 포함하는 것. 좋은 가설은 <b>검증 가능 · 구체적 · 반증 가능 · 실행 연결</b>의 조건을 갖춥니다.</div>
+  </section>
+
+  <!-- M1: 5-step process -->
+  <section class="slide">
+    <span class="eyebrow">Module 1</span>
+    <h2>논리적 검증 프로세스</h2>
+    <p class="sub">문제 정의에서 결론까지 5단계</p>
+    <div class="formula">문제 정의 → 가설 수립 → 지표 정의 → 데이터 검증 → 결론·액션</div>
+    <table>
+      <tr><th>단계</th><th>핵심 질문</th><th>산출물</th></tr>
+      <tr><td>1 · 문제 정의</td><td>무엇이 문제인가?</td><td>분석 가능한 질문</td></tr>
+      <tr><td>2 · 가설 수립</td><td>왜 그럴 것 같은가?</td><td>검증 가능한 가설 목록</td></tr>
+      <tr><td>3 · 지표 정의</td><td>무엇을 측정할 것인가?</td><td>KPI · 측정 기준</td></tr>
+      <tr><td>4 · 데이터 검증</td><td>데이터가 가설을 지지하는가?</td><td>EDA 결과 · 차트</td></tr>
+      <tr><td>5 · 결론·액션</td><td>그래서 무엇을 할 것인가?</td><td>의사결정 · 권고안</td></tr>
+    </table>
+  </section>
+
+  <!-- M1: Drill-down -->
+  <section class="slide">
+    <span class="eyebrow">Module 1</span>
+    <h2>지표 쪼개기 (Drill-down)</h2>
+    <p class="sub">"무슨 일이 일어났는가"를 넘어 "왜 그랬는가"로 — 큰 숫자를 구성 요소로 분해</p>
+    <div class="formula">매출 = 방문수 × 전환율 × 객단가</div>
+    <div class="two-col">
+      <div>
+        <table>
+          <tr><th>분해 대상</th><th>공식</th></tr>
+          <tr><td>매출</td><td>방문수 × 전환율 × 객단가</td></tr>
+          <tr><td>활성 사용자</td><td>신규 + 유지 + 복귀</td></tr>
+          <tr><td>이익</td><td>매출 − (고정비 + 변동비)</td></tr>
+        </table>
+      </div>
+      <ul class="points">
+        <li><b>차원으로 쪼개기</b><small>시간 · 고객 · 상품 · 채널/지역 관점으로 분할</small></li>
+        <li><b>다차원 교차</b><small>"지역 × 연령대"로 숨은 신호 포착</small></li>
+        <li><b>심슨의 역설 주의</b><small>전체는 평탄해도 부분이 서로 상쇄될 수 있음</small></li>
+      </ul>
+    </div>
+    <div class="callout">엑셀 <b>피벗테이블</b> — 지표를 값, 1차 차원을 행, 2차 차원을 열에 배치하면 교차표 완성. 슬라이서로 빠르게 필터링합니다.</div>
+  </section>
+
+  <!-- M1: Lab - timeseries & groups -->
+  <section class="slide">
+    <span class="eyebrow">Module 1 · 실습</span>
+    <h2><span class="lab">LAB</span>시계열 추세 · 집단별 비교</h2>
+    <p class="sub">시간에 따른 추세와 집단 간 차이를 엑셀로 직접 분석</p>
+    <div class="grid g3">
+      <div class="card"><div class="k"><span class="num">1</span> 시계열 추세</div><div class="v">꺾은선 차트 + <b>7일 이동평균</b>(=AVERAGE)으로 단기 변동 속 장기 추세·계절성 파악</div></div>
+      <div class="card"><div class="k"><span class="num">2</span> 요일별 특성</div><div class="v">피벗(행=요일, 값=매출 평균) → 막대그래프로 주말 vs 평일 비교</div></div>
+      <div class="card"><div class="k"><span class="num">3</span> 집단별 비교</div><div class="v">행=고객유형/지점, <b>합계와 평균을 함께</b> → 규모와 효율을 동시에</div></div>
+    </div>
+    <div class="callout">그룹 비교 시 <b>합계만 보지 말고 평균·비율도 함께</b> 보세요. 규모가 커서 합계만 높고 1인당 매출(효율)은 낮을 수 있습니다.</div>
+  </section>
+
+  <!-- M1: Lab - correlation -->
+  <section class="slide">
+    <span class="eyebrow">Module 1 · 실습</span>
+    <h2><span class="lab">LAB</span>상관분석 · 교차분석</h2>
+    <p class="sub">두 변수가 함께 움직이는가(상관) · 범주 간 관계가 있는가(교차)</p>
+    <div class="two-col">
+      <div>
+        <table>
+          <tr><th>상관계수 r</th><th>해석</th></tr>
+          <tr><td>0.7 ~ 1.0</td><td>강한 양의 상관</td></tr>
+          <tr><td>0.4 ~ 0.7</td><td>뚜렷한 양의 상관</td></tr>
+          <tr><td>−0.2 ~ 0.2</td><td>거의 상관 없음</td></tr>
+          <tr><td>−1.0 ~ −0.7</td><td>강한 음의 상관</td></tr>
+        </table>
+        <div class="formula" style="font-size:1rem">=CORREL(B2:B100, C2:C100)</div>
+      </div>
+      <div class="callout" style="margin-top:0">
+        <b>⚠ 상관 ≠ 인과.</b> "아이스크림 판매 ↔ 익사 사고"는 강한 상관이지만, 숨은 제3 변수 <b>"여름철 더위"</b>가 둘을 끌어올린 것. r은 <b>직선 관계</b>만 측정하므로 반드시 <b>산점도</b>를 함께 그리세요.
+      </div>
+    </div>
+  </section>
+
+  <!-- M1: Lab - distribution -->
+  <section class="slide">
+    <span class="eyebrow">Module 1 · 실습</span>
+    <h2><span class="lab">LAB</span>분포 확인 — 히스토그램 · 박스플롯</h2>
+    <p class="sub">평균만 보면 데이터의 진짜 모습을 놓친다 — 분포의 형태를 직접 본다</p>
+    <div class="two-col">
+      <ul class="points">
+        <li><b>평균의 함정</b><small>직원 9명 3천만 + 1명 30억 → 평균 3억, 그러나 아무도 안 받음. 이럴 땐 <b>중앙값</b></small></li>
+        <li><b>히스토그램</b><small>대칭/치우침(왜도)/봉우리 수 → 분포 형태 파악</small></li>
+        <li><b>박스플롯</b><small>사분위수(Q1·중앙값·Q3) · IQR · 수염 밖의 점=이상치</small></li>
+      </ul>
+      <div>
+        <table>
+          <tr><th>분포 형태</th><th>대표값</th></tr>
+          <tr><td>종 모양(정규)</td><td>평균</td></tr>
+          <tr><td>오른쪽 꼬리(소득 등)</td><td>중앙값</td></tr>
+          <tr><td>이봉(두 집단 혼재)</td><td>집단 분리 후</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem"><b>앤스컴 콰르텟</b> — 평균·분산·상관이 거의 같은 4개 데이터가 완전히 다른 모양. 교훈: <b>요약하기 전에 반드시 그려보라.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- M1: checklist -->
+  <section class="slide">
+    <span class="eyebrow">Module 1 · 정리</span>
+    <h2>EDA 실무 체크리스트</h2>
+    <p class="sub">좋은 EDA는 차트를 많이 그린 것이 아니라, 올바른 질문을 던진 것</p>
+    <div class="two-col">
+      <ul class="points">
+        <li>분석 목적과 가설을 <b>한 문장</b>으로 적었는가?</li>
+        <li>행/열 수 · 결측치 · 중복 · 단위를 점검했는가?</li>
+        <li>핵심 지표를 <b>구성 요소·차원</b>으로 쪼갰는가?</li>
+        <li>시간에 따른 추세·계절성을 확인했는가?</li>
+      </ul>
+      <ul class="points">
+        <li>주요 변수의 <b>분포</b>(히스토그램·박스플롯)를 그렸는가?</li>
+        <li>이상치가 오류인지 진짜 특이값인지 판단했는가?</li>
+        <li>상관을 <b>인과로 단정</b>하지 않았는가?</li>
+        <li>발견한 패턴을 다음 단계의 새 질문으로 정리했는가?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== MODULE 2 ===================== -->
+  <section class="slide divider">
+    <div class="mnum">02</div>
+    <h2>시각화의 원리 <span class="accent">및 기획</span></h2>
+    <p class="sub">데이터가 담은 메시지를 가장 빠르고 정확하게 전달한다 · 2.0H</p>
+    <div class="topics"><span>메시지·타겟 정의</span><span>차트 선택</span><span>Data-Ink Ratio</span><span>왜곡 회피</span><span>윤리적 표현</span></div>
+  </section>
+
+  <!-- M2: purpose -->
+  <section class="slide">
+    <span class="eyebrow">Module 2</span>
+    <h2>시각화의 목적 — 메시지와 타겟</h2>
+    <p class="sub">예쁜 그림이 아니라 결론을 보여주는 차트. 그리기 전에 "무엇을 / 누구에게"부터</p>
+    <div class="callout" style="margin-top:0;margin-bottom:1.3rem">차트 제목에 "월별 매출"이 아니라 <b>"3분기 매출이 전년 대비 18% 감소했다"</b>처럼 <b>결론(So-What)</b>을 쓰는 순간, 불필요한 요소가 저절로 정리됩니다.</div>
+    <table>
+      <tr><th>타겟</th><th>관심사</th><th>시각화 전략</th></tr>
+      <tr><td>경영진</td><td>결론·의사결정</td><td>KPI 1~2개, 큰 숫자, 추세 한눈에. 디테일 제거</td></tr>
+      <tr><td>실무자</td><td>원인·세부</td><td>차원별 분해, 비교 가능한 표·차트, 필터 제공</td></tr>
+      <tr><td>외부/고객</td><td>신뢰·맥락</td><td>출처 명시, 단순·오해 없는 표현, 스토리 흐름</td></tr>
+    </table>
+  </section>
+
+  <!-- M2: chart selection -->
+  <section class="slide">
+    <span class="eyebrow">Module 2</span>
+    <h2>차트 선택 가이드</h2>
+    <p class="sub">"내가 보여주려는 관계가 무엇인가"를 정하면 차트는 거의 자동으로 결정된다</p>
+    <table>
+      <tr><th>분석 목적</th><th>권장 차트</th><th>예시</th></tr>
+      <tr><td>비교 (크기)</td><td>막대그래프</td><td>지점별 매출 비교</td></tr>
+      <tr><td>추이 (시간)</td><td>꺾은선그래프</td><td>월별 방문자 추세</td></tr>
+      <tr><td>구성 (비율)</td><td>누적막대 · (제한적)파이</td><td>채널별 매출 비중</td></tr>
+      <tr><td>관계 (상관)</td><td>산점도</td><td>광고비 vs 매출</td></tr>
+      <tr><td>분포 (퍼짐)</td><td>히스토그램 · 박스플롯</td><td>고객 연령 분포</td></tr>
+    </table>
+    <div class="callout"><b>규칙 — 비교는 막대, 추이는 선, 관계는 산점도, 분포는 히스토그램/박스플롯.</b> 파이 남용·추이에 막대·6개 넘는 스파게티 차트를 피하세요.</div>
+  </section>
+
+  <!-- M2: readability -->
+  <section class="slide">
+    <span class="eyebrow">Module 2 · 실습</span>
+    <h2><span class="lab">LAB</span>가독성 — Data-Ink Ratio</h2>
+    <p class="sub">좋은 차트는 더하는 게 아니라 덜어낸 결과. 잉크의 대부분을 데이터에만</p>
+    <div class="two-col">
+      <ul class="points">
+        <li><b>불필요한 요소 제거</b><small>진한 격자선 · 테두리 · 배경 · 3D · 의미 없는 범례 · 과도한 소수점</small></li>
+        <li><b>강조색은 1개</b><small>나머지는 회색, 말하고 싶은 항목만 컬러. 빨강-초록 조합 회피(색맹)</small></li>
+        <li><b>시선 유도</b><small>값 순 정렬 · 직접 라벨 · 제목에 결론 · 핵심에만 주석</small></li>
+      </ul>
+      <table>
+        <tr><th>항목</th><th>Before</th><th>After</th></tr>
+        <tr><td>격자선</td><td>진한 검정</td><td>옅은 회색/제거</td></tr>
+        <tr><td>색상</td><td>무지개 7색</td><td>강조 1색+회색</td></tr>
+        <tr><td>범례</td><td>별도 박스</td><td>계열 끝 직접 라벨</td></tr>
+        <tr><td>제목</td><td>"월별 매출"</td><td>"3분기 18% 감소"</td></tr>
+      </table>
+    </div>
+    <div class="callout">"더 이상 뺄 것이 없을 때 완성된다." 차트도 디자인도 마찬가지입니다.</div>
+  </section>
+
+  <!-- M2: distortion -->
+  <section class="slide">
+    <span class="eyebrow">Module 2 · 실습</span>
+    <h2><span class="lab">LAB</span>정보 왜곡 오류 피하기</h2>
+    <p class="sub">가장 위험한 건 못생긴 차트가 아니라 사실을 왜곡하는 차트</p>
+    <table>
+      <tr><th>왜곡 유형</th><th>무엇이 문제인가</th><th>올바른 대안</th></tr>
+      <tr><td>y축 0 미시작</td><td>작은 차이를 거대하게 과장</td><td><b>막대는 반드시 0부터</b></td></tr>
+      <tr><td>이중 축 오용</td><td>스케일 조정해 가짜 상관 연출</td><td>차트 분리 / 지수화</td></tr>
+      <tr><td>3D 차트</td><td>원근·기울기로 크기 왜곡</td><td>평면 2D 사용</td></tr>
+      <tr><td>면적/버블 과장</td><td>지름→면적이 제곱으로 과장</td><td>면적을 값에 비례</td></tr>
+    </table>
+    <div class="callout"><b>황금률</b> — 막대그래프 y축은 반드시 <b>0에서 시작</b>(길이로 비교하므로). 꺾은선은 0이 아니어도 되지만 <b>축 범위를 반드시 명시</b>하세요.</div>
+  </section>
+
+  <!-- M2: ethics -->
+  <section class="slide">
+    <span class="eyebrow">Module 2 · 실습</span>
+    <h2><span class="lab">LAB</span>윤리적이고 정확한 표현</h2>
+    <p class="sub">시각화의 마지막 책임은 정직함 — 맥락을 숨기면 거짓말과 같다</p>
+    <div class="two-col">
+      <ul class="points">
+        <li><b>체리피킹</b> 회피<small>유리한 기간·집단만 고르지 않기 → 전체 맥락과 함께</small></li>
+        <li><b>기준선 조작</b> 회피<small>전년? 목표? 경쟁사? 비교 기준을 명시</small></li>
+        <li><b>표본 왜곡</b> 회피<small>"90% 만족"(n=10) → 표본 크기 n 항상 표기</small></li>
+      </ul>
+      <div>
+        <div class="card"><div class="k">객관적 팩트 전달 3원칙</div><div class="v">
+          1. <b>출처 명시</b> — 데이터 출처·수집 방법<br>
+          2. <b>기간·표본 명시</b> — 언제, 몇 건<br>
+          3. <b>단위·정의 명시</b> — 매출은 부가세 포함?</div></div>
+      </div>
+    </div>
+    <div class="callout">좋은 분석가는 "내 주장을 돕는 차트"가 아니라 <b>"사실을 가장 정확히 보여주는 차트"</b>를 만듭니다.</div>
+  </section>
+
+  <!-- M2: cheatsheet -->
+  <section class="slide">
+    <span class="eyebrow">Module 2 · 정리</span>
+    <h2>"이 데이터엔 이 차트" 치트시트</h2>
+    <p class="sub">시각화는 메시지 전달 수단 — 목적이 차트를 결정한다</p>
+    <table>
+      <tr><th>보여주려는 것</th><th>첫 번째 선택</th><th>피할 것</th></tr>
+      <tr><td>항목 간 크기 비교</td><td>가로 막대(정렬)</td><td>파이(5개 이상)</td></tr>
+      <tr><td>시간에 따른 변화</td><td>꺾은선</td><td>막대(너무 많을 때)</td></tr>
+      <tr><td>부분과 전체 비율</td><td>누적막대 100%</td><td>3D 파이</td></tr>
+      <tr><td>두 변수 관계</td><td>산점도</td><td>이중 축</td></tr>
+      <tr><td>값의 분포</td><td>히스토그램/박스플롯</td><td>평균만 표기</td></tr>
+      <tr><td>단일 핵심 지표</td><td>큰 숫자 + 추세 스파크라인</td><td>게이지/도넛 남용</td></tr>
+    </table>
+  </section>
+
+  <!-- ===================== MODULE 3 ===================== -->
+  <section class="slide divider">
+    <div class="mnum">03</div>
+    <h2>실무형 <span class="accent">대시보드 구축</span></h2>
+    <p class="sub">한 화면에서 KPI를 모니터링하는 인터랙티브 대시보드 · 2.0H</p>
+    <div class="topics"><span>인-셀 시각화</span><span>KPI·레이아웃 기획</span><span>피벗차트·슬라이서</span><span>자동 갱신</span><span>종합 대시보드</span></div>
+  </section>
+
+  <!-- M3: in-cell -->
+  <section class="slide">
+    <span class="eyebrow">Module 3</span>
+    <h2>표를 직관적으로 — 인-셀 시각화</h2>
+    <p class="sub">차트 없이 셀 안에서 값의 크기·추세·상태를 표현한다</p>
+    <div class="grid g3">
+      <div class="card"><div class="k">🎨 조건부 서식</div><div class="v"><b>색조</b> 값 높낮이 그라데이션 · <b>아이콘 집합</b> 신호등·화살표 · <b>규칙</b> 상위 10%·중복 강조</div></div>
+      <div class="card"><div class="k">📊 데이터 막대</div><div class="v">셀 안에 막대를 그려 상대 크기 표시. "막대만 표시"로 숫자를 숨기면 더 깔끔</div></div>
+      <div class="card"><div class="k">📈 스파크라인</div><div class="v">한 셀 미니 차트 — <b>꺾은선</b>(추세) · <b>열</b>(크기) · <b>승패</b>(달성/미달)</div></div>
+    </div>
+    <div class="callout">인-셀 시각화의 목적은 <b>"값을 읽지 않고도 패턴이 보이게"</b> 하는 것. 색·아이콘은 2~3종 이내로 절제하세요.</div>
+  </section>
+
+  <!-- M3: dashboard planning -->
+  <section class="slide">
+    <span class="eyebrow">Module 3</span>
+    <h2>대시보드 기획 — KPI와 레이아웃</h2>
+    <p class="sub">잘 그린 차트의 모음이 아니라, 의사결정을 돕는 한 장의 화면</p>
+    <div class="two-col">
+      <div class="grid" style="gap:.9rem">
+        <div class="card"><div class="k"><span class="num">1</span> 한 화면 원칙</div><div class="v">스크롤 없이 핵심을 한 화면에</div></div>
+        <div class="card"><div class="k"><span class="num">2</span> 핵심 KPI 우선</div><div class="v">가장 중요한 지표를 상단·좌측에 크게</div></div>
+        <div class="card"><div class="k"><span class="num">3</span> 시선 흐름</div><div class="v">눈은 F자/Z자 — 좌상 → 우상 → 하단 순</div></div>
+      </div>
+      <div>
+        <table>
+          <tr><th>부서</th><th>핵심 KPI</th></tr>
+          <tr><td>영업</td><td>월 매출액, 목표 달성률</td></tr>
+          <tr><td>R&amp;D</td><td>프로젝트 진척률, 일정 준수율</td></tr>
+          <tr><td>인사</td><td>채용 충원율, 이직률</td></tr>
+        </table>
+        <div class="callout" style="margin-top:1rem">KPI는 "많이 보여주기"가 아니라 <b>"골라 보여주기"</b>. 10개 넘으면 아무것도 강조 안 된 것.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- M3: wireframe steps -->
+  <section class="slide">
+    <span class="eyebrow">Module 3</span>
+    <h2>와이어프레임 설계 단계</h2>
+    <p class="sub">셀에 그리기 전에 종이/슬라이드에 박스로 먼저</p>
+    <ol class="steps">
+      <li><b>목적 정의</b> — "누가, 무엇을, 왜 보는가"를 한 문장으로</li>
+      <li><b>KPI 선정</b> — 핵심 3~5개로 압축 (많을수록 나쁨)</li>
+      <li><b>영역 분할</b> — 상단 KPI 카드 / 중앙 추세 차트 / 하단 상세 표</li>
+      <li><b>종이 스케치</b> — 박스 배치를 먼저 그려본다</li>
+      <li><b>그리드 설정</b> — 눈금선 끄고 셀 너비를 정렬해 격자 레이아웃</li>
+    </ol>
+  </section>
+
+  <!-- M3: interaction -->
+  <section class="slide">
+    <span class="eyebrow">Module 3 · 실습</span>
+    <h2><span class="lab">LAB</span>피벗차트 · 슬라이서 · 타임라인</h2>
+    <p class="sub">피벗테이블 + 슬라이서를 연결하면 클릭만으로 여러 차트가 동시에 바뀐다</p>
+    <div class="grid g2">
+      <div class="card"><div class="k">🔗 슬라이서 (Slicer)</div><div class="v">범주(지역·채널·부서) 버튼 필터. 여러 피벗에 <b>보고서 연결</b>하면 한 클릭으로 전체 갱신</div></div>
+      <div class="card"><div class="k">📅 시간 표시 막대 (Timeline)</div><div class="v">날짜 전용 필터 — 연/분기/월/일 단위로 기간을 슬라이드</div></div>
+    </div>
+    <div class="callout"><b>핵심</b> — 슬라이서/타임라인을 모든 피벗 요소에 연결하면 사용자가 클릭 한 번으로 대시보드 전체를 탐색하는 <b>인터랙티브 화면</b>이 됩니다.</div>
+  </section>
+
+  <!-- M3: automation -->
+  <section class="slide">
+    <span class="eyebrow">Module 3 · 실습</span>
+    <h2><span class="lab">LAB</span>자동 갱신 리포트</h2>
+    <p class="sub">만들고 계속 쓰는 템플릿 — 수작업 업데이트는 곧 방치로 이어진다</p>
+    <div class="two-col">
+      <ul class="points">
+        <li><b>표(Table)로 변환</b><small>Ctrl+T — 데이터가 늘어도 범위가 자동 확장</small></li>
+        <li><b>모두 새로 고침</b><small>원본만 갱신하면 피벗·차트가 한 번에 업데이트</small></li>
+        <li><b>GETPIVOTDATA</b><small>피벗 값을 KPI 카드로 안전하게 끌어오기</small></li>
+      </ul>
+      <div class="callout" style="margin-top:0">원본 갱신이 <b>"모두 새로 고침" 한 번</b>으로 반영되도록 처음부터 설계하면, 매달 손대지 않아도 살아있는 리포트가 됩니다.</div>
+    </div>
+  </section>
+
+  <!-- M3: capstone checklist -->
+  <section class="slide">
+    <span class="eyebrow">Module 3 · 종합</span>
+    <h2><span class="lab">LAB</span>부서 KPI 대시보드 점검</h2>
+    <p class="sub">인-셀 시각화 · 기획 · 인터랙션 · 자동화를 한 화면에</p>
+    <div class="two-col">
+      <ul class="points">
+        <li>핵심 KPI가 상단·좌측에 우선 배치되어 있는가?</li>
+        <li>스크롤 없이 한 화면에 들어오는가?</li>
+        <li>슬라이서/타임라인이 모든 요소에 연결되는가?</li>
+      </ul>
+      <ul class="points">
+        <li>원본 갱신이 "모두 새로 고침"만으로 반영되는가?</li>
+        <li>색·아이콘이 절제되어 강조가 분명한가?</li>
+        <li>제목·기준 기간·갱신일자가 표시되어 있는가?</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== WRAP-UP ===================== -->
+  <section class="slide">
+    <span class="eyebrow">Course Recap</span>
+    <h2>전체 과정 회고</h2>
+    <p class="sub">데이터를 다루는 세 단계를 차례로 익혔습니다</p>
+    <table>
+      <tr><th>모듈</th><th>주제</th><th>핵심 역량</th></tr>
+      <tr><td>1</td><td>탐색적 데이터분석 (EDA)</td><td>데이터 정제 · 구조 파악 · 요약통계</td></tr>
+      <tr><td>2</td><td>시각화</td><td>목적에 맞는 차트 선택과 정직한 표현</td></tr>
+      <tr><td>3</td><td>대시보드</td><td>KPI 종합 · 인터랙션 · 자동화</td></tr>
+    </table>
+    <div class="callout">현업 적용 — ① <b>작게 시작</b>(KPI 3개 한 장) ② <b>자동 갱신을 기본</b>으로 ③ <b>보는 사람 기준</b>(1분 안에 읽히게) ④ <b>분기마다 KPI 점검.</b></div>
+  </section>
+
+  <!-- Closing -->
+  <section class="slide cover" style="background:radial-gradient(130% 120% at 85% 90%, #2a4374 0%, var(--navy) 45%, var(--navy-3) 100%)">
+    <div class="kicker">Thank You</div>
+    <h1>데이터 분석의 끝은<br>더 나은 결정입니다</h1>
+    <p class="tag">대시보드는 그 결정을 빠르게 돕는 도구일 뿐. <br>오늘 익힌 EDA → 시각화 → 대시보드를 현업의 한 장으로 옮겨보세요. 수고하셨습니다.</p>
+    <div class="meta">
+      <span class="pill"><b>Site</b> data.dreamitbiz.com</span>
+      <span class="pill"><b>운영</b> 드림아이티비즈(DreamIT Biz)</span>
+      <span class="pill"><b>문의</b> aebon@dreamitbiz.com</span>
+    </div>
+  </section>
+
+</div>
+
+<div class="hint">← → 또는 Space · F 전체화면 · P 인쇄(PDF)</div>
+<div class="hud"><span class="brand">Data<i> Lab</i></span><span id="counter">1 / 1</span></div>
+<div class="nav"><button id="prev" aria-label="이전">‹</button><button id="next" aria-label="다음">›</button></div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let i=0;
+  const prog=document.getElementById('prog');
+  const counter=document.getElementById('counter');
+  function show(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    slides[i].scrollTop=0;
+    prog.style.width=((i+1)/slides.length*100)+'%';
+    counter.textContent=(i+1)+' / '+slides.length;
+    location.hash=i+1;
+  }
+  function next(){show(i+1)} function prev(){show(i-1)}
+  document.getElementById('next').onclick=next;
+  document.getElementById('prev').onclick=prev;
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)){e.preventDefault();next()}
+    else if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key)){e.preventDefault();prev()}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen()}
+    else if(e.key.toLowerCase()==='p')window.print();
+  });
+  // swipe
+  let x0=null;
+  addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>50){dx<0?next():prev()}x0=null},{passive:true});
+  const start=parseInt(location.hash.slice(1));
+  show(Number.isInteger(start)&&start>0?start-1:0);
+</script>
+</body>
+</html>
