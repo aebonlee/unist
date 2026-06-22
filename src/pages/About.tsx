@@ -2,16 +2,27 @@ import { Link } from 'react-router-dom';
 import SEOHead from '../components/SEOHead';
 import type { ReactElement } from 'react';
 
+/* 강의 안내 (제공 정보) */
+const COURSE_INFO = [
+  { k: '교육과정', v: '생성형 AI 활용 데이터 분석 (화학분야)' },
+  { k: '강의일자', v: '2026. 06. 23 (화)' },
+  { k: '강의시간', v: '09:30 ~ 17:20' },
+  { k: '강의시수', v: '1일 6시간' },
+  { k: '강의장소', v: '울산 남구 테크노산업로55번길 10 산업단지캠퍼스 UNIST관' },
+  { k: '수강대상', v: '울산지역 중소기업 재직자' },
+  { k: '강의형태', v: '온·오프라인 혼합 (오프라인 25명 + 온라인 20여 명)' },
+];
+
 const About = (): ReactElement => {
   return (
     <>
-      <SEOHead title="과정 소개 | 데이터 분석 실습 & 시각화" description="2026 KERIS 교육과정 — 데이터 분석 실습 & 시각화 과정 소개" />
+      <SEOHead title="과정 소개 | 생성형 AI 활용 데이터 분석" description="울산 중소기업 현장연계 전문인력 양성과정 · 화학 트랙 — 생성형 AI 활용 데이터 분석 과정 소개" />
 
       <section className="page-header-ed">
         <div className="container">
           <div className="eyebrow">About This Course</div>
           <h2>과정 소개</h2>
-          <p>2026 KERIS 교육과정(안) · 공통직무 · 데이터 분석 실습 &amp; 시각화</p>
+          <p>울산 중소기업 현장연계 전문인력 양성과정 · 화학 트랙 — 생성형 AI 활용 데이터 분석</p>
         </div>
       </section>
 
@@ -30,45 +41,83 @@ const About = (): ReactElement => {
               color: 'var(--text-primary)',
             }}>
               <strong style={{ fontSize: '17px', color: 'var(--navy-800)', display: 'block', marginBottom: '12px' }}>
-                데이터 분석과 시각화의 핵심 원리를 하루에 익히는 실습 중심 과정입니다.
+                코드를 직접 짜지 않아도 생성형 AI로 현장 데이터를 분석하는 실습 중심 과정입니다.
               </strong>
               <p style={{ margin: '0 0 12px' }}>
-                본 과정은 2026 KERIS 교육과정(안) 공통직무 중급 과정으로, 엑셀 기반
-                EDA·시각화·대시보드 구축 실습을 통해 데이터 기반 의사결정 역량을
-                강화하는 것을 목표로 합니다. 1일 6시간, 2시간씩 3개 모듈로 구성됩니다.
+                본 과정은 울산 중소기업 현장연계 전문인력 양성과정 <strong>화학 트랙</strong>으로, 비전공자도
+                Google Colab과 Gemini를 활용해 데이터 <strong>수집 → 전처리 → 분석 → 인사이트 도출</strong>까지
+                전 과정을 스스로 수행하는 것을 목표로 합니다. 1일 6시간, 1시간씩 6개 모듈로 구성됩니다.
               </p>
               <p style={{ margin: 0 }}>
-                탐색적 데이터분석(EDA)으로 데이터를 쪼개 패턴을 찾고, 시각화의 원리를
-                이해해 메시지를 정확히 전달하며, 마지막으로 피벗·슬라이서를 활용한
-                실무형 대시보드를 직접 완성합니다. 이론 30% · 실습 70%로 진행됩니다.
+                산업 AX와 데이터 문해력에서 출발해 분석 환경(Colab·PTCF), 데이터 정제·통계, 고객 반응 분석을 익히고,
+                <strong> KAMP 화학 공정 실데이터로 수율을 예측하고 최적 운전조건을 도출</strong>한 뒤, NotebookLM·Canvas로
+                결과를 리포트·대시보드로 마무리합니다. 이론 20% · 실습 60% · 프로젝트 20%로 진행됩니다.
               </p>
             </div>
 
-            {/* 제작 배경 */}
+            {/* 강의 안내 */}
+            <h3 style={{ fontSize: '20px', color: 'var(--navy-800)', fontWeight: 700, marginBottom: '20px' }}>
+              강의 안내
+            </h3>
+            <div style={{
+              border: '1px solid var(--line)',
+              borderRadius: 'var(--radius)',
+              overflow: 'hidden',
+              marginBottom: '48px',
+              background: 'var(--bg-white)',
+            }}>
+              {COURSE_INFO.map((row, i) => (
+                <div key={row.k} style={{
+                  display: 'grid',
+                  gridTemplateColumns: '140px 1fr',
+                  borderTop: i === 0 ? 'none' : '1px solid var(--line)',
+                }}>
+                  <div style={{
+                    padding: '14px 20px',
+                    background: 'var(--navy-50)',
+                    fontWeight: 700,
+                    fontSize: '14px',
+                    color: 'var(--navy-800)',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}>{row.k}</div>
+                  <div style={{
+                    padding: '14px 20px',
+                    fontSize: '14px',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.6,
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}>{row.v}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* 교육 목표 */}
             <h3 style={{ fontSize: '20px', color: 'var(--navy-800)', fontWeight: 700, marginBottom: '20px' }}>
               교육 목표
             </h3>
             <div style={{ display: 'grid', gap: '20px', marginBottom: '48px' }}>
               {[
                 {
-                  icon: 'fa-magnifying-glass-chart',
-                  title: '탐색적 데이터분석(EDA)',
-                  desc: '가설을 세우고 지표를 쪼개며(Drill-down), 상관·교차분석과 분포 확인으로 데이터에 숨은 패턴과 인사이트를 도출합니다.'
+                  icon: 'fa-industry',
+                  title: '산업 AX와 데이터 리터러시',
+                  desc: '화학·제조 산업의 AI 전환(AX) 흐름을 이해하고, 데이터를 읽고 해석해 근거로 소통하는 현장 데이터 문해력을 갖춥니다.'
                 },
                 {
-                  icon: 'fa-chart-pie',
-                  title: '시각화의 원리와 기획',
-                  desc: '데이터 특성에 맞는 차트를 선택하고, 정보 왜곡 없이 메시지를 정확하게 전달하는 시각화 원칙을 익힙니다.'
+                  icon: 'fa-robot',
+                  title: '생성형 AI로 분석 자동화',
+                  desc: 'Colab의 Gemini와 PTCF 프롬프트 원칙으로 분석 코드를 직접 짜지 않고도 수집·전처리·분석을 수행합니다.'
                 },
                 {
-                  icon: 'fa-gauge-high',
-                  title: '실무형 대시보드 구축',
-                  desc: '조건부 서식·피벗 차트·슬라이서를 활용해 KPI를 한 화면에 담고, 자동 갱신되는 인터랙티브 리포트를 완성합니다.'
+                  icon: 'fa-flask',
+                  title: 'KAMP 화학공정 품질 분석',
+                  desc: 'KAMP 화학 공정 실데이터로 운전변수와 수율의 관계를 분석하고, 불량 배치를 예측해 최적 운전조건을 도출합니다.'
                 },
                 {
-                  icon: 'fa-lightbulb',
-                  title: '데이터 기반 의사결정',
-                  desc: '엑셀 기반 실습을 통해 숫자를 인사이트로 바꾸고, 실무 보고와 의사결정에 바로 적용할 수 있는 역량을 내재화합니다.'
+                  icon: 'fa-chart-line',
+                  title: '결과의 시각화·지식화',
+                  desc: 'NotebookLM으로 분석을 지식화하고 Gemini Canvas 리포트·KPI 대시보드로 분석을 운영 도구로 전환합니다.'
                 },
               ].map((item, i) => (
                 <div key={i} style={{
@@ -99,7 +148,7 @@ const About = (): ReactElement => {
               ))}
             </div>
 
-            {/* 플랫폼 구성 */}
+            {/* 사이트 구성 */}
             <h3 style={{ fontSize: '20px', color: 'var(--navy-800)', fontWeight: 700, marginBottom: '20px' }}>
               사이트 구성
             </h3>
@@ -110,12 +159,14 @@ const About = (): ReactElement => {
               marginBottom: '48px',
             }}>
               {[
-                { num: '01', title: '커리큘럼', desc: 'EDA·시각화·대시보드 3모듈', link: '/curriculum' },
-                { num: '02', title: '모듈 1 · EDA', desc: '탐색적 데이터분석 강의안', link: '/lecture/module1' },
-                { num: '03', title: '모듈 2 · 시각화', desc: '시각화의 원리 및 기획', link: '/lecture/module2' },
-                { num: '04', title: '모듈 3 · 대시보드', desc: '실무형 대시보드 구축', link: '/lecture/module3' },
-                { num: '05', title: '강의안 허브', desc: '모듈별 강의 자료 모음', link: '/lecture' },
-                { num: '06', title: '추천 자료', desc: '데이터·시각화 학습 리소스', link: '/recommended' },
+                { num: '01', title: '커리큘럼', desc: '6개 모듈 세부 커리큘럼', link: '/curriculum' },
+                { num: '02', title: 'M1 · 산업 AX', desc: '산업 AX와 데이터 리터러시', link: '/lecture/module1' },
+                { num: '03', title: 'M2 · 분석 환경', desc: 'Colab·Gemini·PTCF', link: '/lecture/module2' },
+                { num: '04', title: 'M3 · 정제·통계', desc: '데이터 정제 및 통계 분석', link: '/lecture/module3' },
+                { num: '05', title: 'M4 · 고객 분석', desc: '고객 반응 데이터 수집·분석', link: '/lecture/module4' },
+                { num: '06', title: 'M5 · 화학공정', desc: 'KAMP 화학공정 품질분석', link: '/lecture/module5' },
+                { num: '07', title: 'M6 · 시각화', desc: 'AI 시각화·지식화 프로젝트', link: '/lecture/module6' },
+                { num: '08', title: '추천 자료', desc: '데이터 분석 학습 리소스', link: '/recommended' },
               ].map((item) => (
                 <Link key={item.num} to={item.link} style={{
                   padding: '20px',
@@ -149,7 +200,7 @@ const About = (): ReactElement => {
                 <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--gold)', marginBottom: '8px', letterSpacing: '0.05em' }}>DEVELOPER</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>드림아이티비즈</div>
                 <div style={{ fontSize: '13px', opacity: 0.7, lineHeight: 1.5 }}>
-                  86개 교육 사이트를 운영하는 에듀테크 전문 기업
+                  다수의 교육 사이트를 운영하는 에듀테크 전문 기업
                 </div>
                 <div style={{ marginTop: '16px', fontSize: '13px', fontWeight: 600, color: 'var(--gold)' }}>
                   자세히 보기 <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px', fontSize: '11px' }} />
@@ -167,7 +218,7 @@ const About = (): ReactElement => {
                 <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--gold)', marginBottom: '8px', letterSpacing: '0.05em' }}>INSTRUCTOR</div>
                 <div style={{ fontSize: '18px', fontWeight: 700, marginBottom: '8px' }}>강사 소개</div>
                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  데이터 분석·시각화 교육 전문 강사 이애본 박사 프로필
+                  생성형 AI·데이터 분석 교육 전문 강사 이애본 박사 프로필
                 </div>
                 <div style={{ marginTop: '16px', fontSize: '13px', fontWeight: 600, color: 'var(--gold)' }}>
                   자세히 보기 <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px', fontSize: '11px' }} />
