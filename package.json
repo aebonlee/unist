@@ -1,0 +1,35 @@
+{
+  "name": "unist",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "homepage": "https://unist.dreamitbiz.com",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "og": "node scripts/generate-og.cjs",
+    "pptx": "python3 scripts/generate-pptx.py",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.96.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.13.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^5.1.1",
+    "gh-pages": "^6.3.0",
+    "sharp": "^0.34.5",
+    "typescript": "~5.8.3",
+    "vite": "^7.3.1"
+  }
+}
