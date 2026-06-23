@@ -31,6 +31,7 @@ const Module4 = lazy(() => import('../pages/Module4'));
 const Module5 = lazy(() => import('../pages/Module5'));
 const Module6 = lazy(() => import('../pages/Module6'));
 const RecommendedSites = lazy(() => import('../pages/RecommendedSites'));
+const Glossary = lazy(() => import('../pages/Glossary'));
 const AboutPage = lazy(() => import('../pages/About'));
 const CompanyIntro = lazy(() => import('../pages/CompanyIntro'));
 const InstructorIntro = lazy(() => import('../pages/InstructorIntro'));
@@ -116,6 +117,9 @@ const PublicLayout = (): ReactElement => {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/about/company" element={<CompanyIntro />} />
             <Route path="/about/instructor" element={<InstructorIntro />} />
+
+            {/* 용어 사전 */}
+            <Route path="/glossary" element={<Glossary />} />
 
             {/* 추천사이트 */}
             <Route path="/recommended" element={<RecommendedSites />} />

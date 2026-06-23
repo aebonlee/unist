@@ -123,7 +123,7 @@ const site: SiteConfig = {
         { path: '/prompt/evaluate', labelKey: '프롬프트 평가' },
       ]
     },
-    { labelKey: 'AI 실습실', path: '/playground', activePath: '/playground' },
+    { labelKey: '용어 사전', path: '/glossary', activePath: '/glossary' },
     { labelKey: '추천 자료', path: '/recommended', activePath: '/recommended' },
   ],
 
