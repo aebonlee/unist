@@ -15,6 +15,8 @@ const MODULES = [
     desc: 'KAMP 화학 공정 데이터로 운전변수와 수율 상관·예측, 불량 배치 예측 모델과 최적 운전조건 도출.', meta: ['1.0H', '실습', '화학 핵심'] },
   { no: '06', to: '/lecture/module6', level: 3, title: 'AI 도구 활용 분석 결과 시각화',
     desc: 'NotebookLM 지식 구조화, Gemini Canvas 최종 리포트, KPI 앱 대시보드 기획·제작 프로젝트.', meta: ['1.0H', '프로젝트'] },
+  { no: 'EX', to: '/lecture/case-study', level: 3, title: '실습 사례 · 용해탱크 품질 예측',
+    desc: 'KAMP 용해탱크 데이터 + Colab으로 운전변수와 품질의 관계를 분석하고 시계열 품질 예측까지. 모듈 1~6 워크플로우 종합 적용.', meta: ['Colab', 'KAMP', '실습 사례'] },
 ];
 
 const Lecture = (): ReactElement => {

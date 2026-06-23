@@ -30,6 +30,7 @@ const Module3 = lazy(() => import('../pages/Module3'));
 const Module4 = lazy(() => import('../pages/Module4'));
 const Module5 = lazy(() => import('../pages/Module5'));
 const Module6 = lazy(() => import('../pages/Module6'));
+const CaseStudy = lazy(() => import('../pages/CaseStudy'));
 const RecommendedSites = lazy(() => import('../pages/RecommendedSites'));
 const Glossary = lazy(() => import('../pages/Glossary'));
 const AboutPage = lazy(() => import('../pages/About'));
@@ -95,6 +96,7 @@ const PublicLayout = (): ReactElement => {
             <Route path="/lecture/module4" element={<Module4 />} />
             <Route path="/lecture/module5" element={<Module5 />} />
             <Route path="/lecture/module6" element={<Module6 />} />
+            <Route path="/lecture/case-study" element={<CaseStudy />} />
 
             {/* AI 메뉴 (ai-free 포팅) */}
             <Route path="/learn" element={<Learn />} />
