@@ -6,11 +6,11 @@ import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import SearchModal from '../SearchModal';
 import site from '../../config/site';
-import type { MenuItem } from '../../types';
+import type { MenuItem, SubMenuItem } from '../../types';
 
 interface ResolvedMenuItem extends MenuItem {
   label: string;
-  dropdown?: (MenuItem & { label: string })[];
+  dropdown?: (SubMenuItem & { label: string })[];
 }
 
 const Navbar = (): ReactElement => {
@@ -125,7 +125,9 @@ const Navbar = (): ReactElement => {
                       <ul className={`dropdown-menu ${activeDropdown === index ? 'active' : ''}`}>
                         {item.dropdown.map((subItem, subIndex) => (
                           <li key={subIndex}>
-                            <Link to={subItem.path}>{subItem.label}</Link>
+                            <Link to={subItem.path}>
+                              {subItem.highlight ? <span className="hl-marker">{subItem.label}</span> : subItem.label}
+                            </Link>
                           </li>
                         ))}
                       </ul>

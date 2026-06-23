@@ -86,7 +86,7 @@ const site: SiteConfig = {
         { path: '/lecture/module4', labelKey: '고객 반응 데이터 분석' },
         { path: '/lecture/module5', labelKey: 'KAMP 화학공정 품질분석' },
         { path: '/lecture/module6', labelKey: 'AI 시각화·지식화 프로젝트' },
-        { path: '/lecture/case-study', labelKey: '실습 사례 · 용해탱크 품질예측' },
+        { path: '/lecture/case-study', labelKey: '실습 사례 · 용해탱크 품질예측', highlight: true },
       ]
     },
     { labelKey: 'AI 학습자료', path: '/learn', activePath: '/learn' },

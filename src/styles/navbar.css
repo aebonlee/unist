@@ -187,6 +187,31 @@
     color: var(--navy-800);
 }
 
+/* 연파랑 형광펜 강조 (드롭다운 메뉴 항목) */
+.dropdown-menu li a .hl-marker {
+    background: linear-gradient(104deg,
+        rgba(191, 227, 255, 0) 0.9%,
+        #BFE3FF 2.4%,
+        #BFE3FF 95%,
+        rgba(191, 227, 255, 0.55) 99%);
+    color: #1B2A4A;
+    padding: 1px 6px;
+    margin: 0 -3px;
+    border-radius: 7px 4px 6px 4px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    font-weight: 700;
+}
+
+.dropdown-menu li a:hover .hl-marker {
+    background: linear-gradient(104deg,
+        rgba(160, 213, 255, 0) 0.9%,
+        #A6D7FF 2.4%,
+        #A6D7FF 95%,
+        rgba(160, 213, 255, 0.6) 99%);
+    color: #1B2A4A;
+}
+
 .nav-actions {
     display: flex;
     align-items: center;

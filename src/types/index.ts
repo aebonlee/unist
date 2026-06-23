@@ -174,6 +174,7 @@ export interface MenuItem {
 export interface SubMenuItem {
   path: string;
   labelKey: string;
+  highlight?: boolean;
 }
 
 export interface FamilySite {
