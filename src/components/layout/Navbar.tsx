@@ -93,10 +93,10 @@ const Navbar = (): ReactElement => {
             <div className="logo">
               <Link to="/">
                 <span className="brand-mark">
-                  Data<span className="brand-accent"> Lab</span>
+                  UN<span className="brand-accent">IST</span>
                 </span>
                 <span className="brand-sep" aria-hidden="true"></span>
-                <span className="brand-sub">데이터 분석 &amp; 시각화</span>
+                <span className="brand-sub">생성형 AI 활용 데이터 분석</span>
               </Link>
             </div>
 

@@ -192,10 +192,10 @@ export const translations: Record<string, Record<string, unknown>> = {
         aboutInstructor: '강사 소개'
       },
       home: {
-        title: '데이터 분석 실습 & 시각화',
-        subtitle: '엑셀 기반 EDA·시각화·대시보드 구축 1일 6시간 중급 과정',
-        welcome: '데이터 분석 & 시각화 학습 사이트에 오신 것을 환영합니다.',
-        description: '탐색적 데이터분석(EDA), 시각화 원리, 실무형 대시보드 구축을 실습 중심으로 학습합니다.'
+        title: '생성형 AI 활용 데이터 분석',
+        subtitle: '울산 중소기업 현장연계 전문인력 양성과정 · 화학 트랙 · 6시간',
+        welcome: '생성형 AI 활용 데이터 분석 학습 사이트에 오신 것을 환영합니다.',
+        description: 'Colab·Gemini로 화학 공정·고객·비즈니스 데이터를 수집·전처리·분석·시각화하는 과정을 실습 중심으로 학습합니다.'
       }
     }
   },
@@ -392,10 +392,10 @@ export const translations: Record<string, Record<string, unknown>> = {
         aboutInstructor: 'Instructor'
       },
       home: {
-        title: 'Data Analysis & Visualization',
-        subtitle: 'Excel-based EDA, visualization & dashboards · 1-day 6-hour intermediate course',
-        welcome: 'Welcome to the Data Analysis & Visualization learning site.',
-        description: 'Learn exploratory data analysis (EDA), visualization principles, and practical dashboard building, hands-on.'
+        title: 'Generative AI for Data Analysis',
+        subtitle: 'Ulsan SME field-linked workforce program · Chemistry track · 6 hours',
+        welcome: 'Welcome to the Generative AI for Data Analysis learning site.',
+        description: 'Hands-on learning to collect, preprocess, analyze, and visualize chemical-process, customer, and business data with Colab and Gemini.'
       }
     }
   }

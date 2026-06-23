@@ -11,10 +11,10 @@ const Footer = (): ReactElement => {
       <div className="container">
         <div className="footer-grid">
           <div>
-            <div className="footer-brand-mark">Data Lab</div>
+            <div className="footer-brand-mark">UNIST</div>
             <p className="footer-tag">
-              엑셀 기반 EDA·시각화·대시보드 구축 실습으로 데이터 기반 의사결정
-              역량을 키우는 1일 6시간 중급 과정. DreamIT Biz Group이 운영합니다.
+              울산 중소기업 현장연계 전문인력 양성과정 · 화학 트랙 — Colab·Gemini
+              생성형 AI로 배우는 6시간 실전 데이터 분석 과정. DreamIT Biz Group이 운영합니다.
             </p>
             <div className="company-info">
               <p><strong>{site.company.name}</strong></p>
