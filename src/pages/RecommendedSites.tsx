@@ -12,6 +12,13 @@ interface SiteLink {
 /* 01 — 공공·실무 데이터 출처 (실습용 데이터셋) */
 const DATA_SOURCES: SiteLink[] = [
   {
+    name: 'KAMP 인공지능 제조 플랫폼',
+    nameEn: 'kamp-ai.kr',
+    url: 'https://www.kamp-ai.kr/aidataList',
+    desc: '정부가 제공하는 제조 AI 데이터셋·분석 환경. 화학·표면처리(도금)·용접 등 실제 공정 데이터를 변수 명세·가이드북과 함께 무료로 제공합니다. (모듈 5 화학공정 품질분석 실습 데이터)',
+    tag: '화학 핵심',
+  },
+  {
     name: '공공데이터포털',
     nameEn: 'data.go.kr',
     url: 'https://www.data.go.kr',
